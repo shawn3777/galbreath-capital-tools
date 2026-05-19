@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galbreath Capital — Investor Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0B1F3A;--gold:#C9A84C;--gold-lt:#E8D199;--cream:#FAF8F3;--border:#D4C9A8;--muted:#6B6B7A;--text:#1A1A2E;--green:#2A7A2A;--green-bg:#EEF7EE}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;padding:2rem 1rem}
+.card{background:#fff;border:0.5px solid var(--border);border-radius:16px;max-width:580px;margin:0 auto;overflow:hidden;box-shadow:0 4px 32px rgba(11,31,58,0.1)}
+.hdr{background:var(--navy);padding:2.5rem 2rem 2rem;text-align:center;position:relative}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.logo-line{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:0.75rem}
+.diam{width:10px;height:10px;background:var(--gold);transform:rotate(45deg)}
+.logo-txt{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:13px;letter-spacing:0.3em;text-transform:uppercase}
+.hdr h1{font-family:'Cormorant Garamond',serif;color:#fff;font-size:30px;font-weight:600;margin-bottom:0.4rem}
+.hdr p{color:var(--gold-lt);font-size:12px;opacity:0.85;letter-spacing:0.05em}
+.steps{display:flex;padding:1.25rem 2rem;border-bottom:0.5px solid var(--border);background:#FDFCF9}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:12px;right:-50%;width:100%;height:1px;background:var(--border);z-index:0}
+.dot{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--muted);background:#fff;z-index:1;transition:all 0.3s}
+.step.active .dot{background:var(--navy);border-color:var(--navy);color:#fff}
+.step.done .dot{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.slbl{font-size:10px;color:var(--muted);letter-spacing:0.05em;text-align:center}
+.step.active .slbl{color:var(--navy);font-weight:500}
+.pbar{height:3px;background:var(--border);overflow:hidden}
+.pfill{height:100%;background:var(--gold);transition:width 0.4s ease}
+.body{padding:2rem}
+.lbadge{display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);border:0.5px solid #C0DD97;color:#1A5C1A;font-size:10px;padding:4px 12px;border-radius:20px;letter-spacing:0.06em;margin-bottom:1rem}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);margin-bottom:1.25rem;font-weight:600}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
+.field input,.field select{width:100%;height:42px;border:0.5px solid var(--border);border-radius:8px;padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border 0.2s;appearance:none}
+.field input:focus,.field select:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,31,58,0.06)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ci{display:flex;align-items:center;gap:10px;padding:11px 14px;border:0.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;margin-bottom:8px;user-select:none}
+.ci:hover{border-color:var(--navy);background:#F8F7F2}
+.ci.sel{border-color:var(--gold);background:#FBF8EE}
+.ci input[type=radio]{width:16px;height:16px;accent-color:var(--gold);flex-shrink:0}
+.ci span{font-size:13px;color:var(--text);line-height:1.4}
+.disc{background:#F8F7F2;border:0.5px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0;font-size:12px;color:var(--muted);line-height:1.7}
+.disc strong{color:var(--navy)}
+.btn{width:100%;height:46px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;letter-spacing:0.06em;transition:all 0.2s;margin-top:1.5rem}
+.btn:hover{background:#0F2D52;transform:translateY(-1px)}
+.btn:disabled{background:#B4B2A9;cursor:not-allowed;transform:none}
+.bbk{background:transparent;border:0.5px solid var(--border);color:var(--muted);padding:0 20px;height:40px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:1rem;transition:all 0.2s}
+.bbk:hover{border-color:var(--navy);color:var(--navy)}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.ab{height:40px;border:0.5px solid var(--border);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);cursor:pointer;transition:all 0.2s}
+.ab:hover,.ab.sel{border-color:var(--gold);background:#FBF8EE;color:var(--navy);font-weight:500}
+.aibox{background:var(--navy);border-radius:12px;padding:1.5rem;margin:1rem 0}
+.ailbl{font-size:10px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:6px}
+.ailbl::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
+.aitxt{color:#E8E4D8;font-size:14px;line-height:1.75;font-style:italic}
+.aisig{color:var(--gold);font-size:12px;margin-top:0.75rem;display:none}
+.cicon{width:60px;height:60px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px}
+.tag{display:inline-block;padding:4px 12px;background:#EEF3F9;color:#185FA5;border-radius:20px;font-size:11px;font-weight:500;margin:3px}
+.summary-row{display:grid;grid-template-columns:1fr 1fr;padding:11px 14px;border-bottom:0.5px solid var(--border);font-size:13px}
+.summary-row:last-child{border-bottom:none}
+.dots span{animation:blink 1.2s infinite;display:inline-block}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+.hidden{display:none}
+.error-msg{background:#FEF3F0;border:0.5px solid #F5C4B3;border-radius:8px;padding:0.75rem 1rem;font-size:13px;color:#C9432A;margin-top:1rem;display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <div class="logo-line"><div class="diam"></div><span class="logo-txt">Galbreath Capital</span><div class="diam"></div></div>
+    <h1>Investor Onboarding</h1>
+    <p>Confidential &nbsp;·&nbsp; Reg D 506(c) &nbsp;·&nbsp; Accredited Investors Only</p>
+  </div>
+
+  <div class="steps" id="steps">
+    <div class="step active" id="s1"><div class="dot">1</div><div class="slbl">Profile</div></div>
+    <div class="step" id="s2"><div class="dot">2</div><div class="slbl">Investment</div></div>
+    <div class="step" id="s3"><div class="dot">3</div><div class="slbl">Confirm</div></div>
+  </div>
+  <div class="pbar"><div class="pfill" id="pf" style="width:33%"></div></div>
+
+  <!-- PAGE 1 -->
+  <div class="body" id="p1">
+    <div class="lbadge"><div class="ldot"></div>Live &nbsp;·&nbsp; Submissions sent directly to Galbreath Capital</div>
+    <div class="stitle">Your investor profile</div>
+    <div class="row2">
+      <div class="field"><label>First name</label><input id="fn" type="text" placeholder="First name" autocomplete="given-name"></div>
+      <div class="field"><label>Last name</label><input id="ln" type="text" placeholder="Last name" autocomplete="family-name"></div>
+    </div>
+    <div class="field"><label>Email address</label><input id="em" type="email" placeholder="you@email.com" autocomplete="email"></div>
+    <div class="field"><label>Phone number</label><input id="ph" type="tel" placeholder="(214) 555-0100" autocomplete="tel"></div>
+    <div class="field"><label>State of residence</label>
+      <select id="st">
+        <option value="">Select state...</option>
+        <option>Texas</option><option>California</option><option>Florida</option><option>New York</option>
+        <option>Georgia</option><option>Illinois</option><option>Colorado</option><option>Arizona</option>
+        <option>Nevada</option><option>Washington</option><option>Ohio</option><option>Other</option>
+      </select>
+    </div>
+    <div class="field"><label>Accreditation basis</label>
+      <div class="ci" id="a1" onclick="pickAcc('income','a1')"><input type="radio" name="acc" value="income"><span>Income — $200K+ individual / $300K+ joint (last 2 years)</span></div>
+      <div class="ci" id="a2" onclick="pickAcc('networth','a2')"><input type="radio" name="acc" value="networth"><span>Net worth — $1M+ excluding primary residence</span></div>
+      <div class="ci" id="a3" onclick="pickAcc('entity','a3')"><input type="radio" name="acc" value="entity"><span>Entity — $5M+ in assets or all accredited members</span></div>
+    </div>
+    <button class="btn" onclick="go2()">Continue →</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="body hidden" id="p2">
+    <div class="stitle">Investment details</div>
+    <div class="field"><label>Investment amount</label>
+      <div class="agrid">
+        <button class="ab" onclick="pickAmt(this,'$100,000')">$100,000</button>
+        <button class="ab" onclick="pickAmt(this,'$250,000')">$250,000</button>
+        <button class="ab" onclick="pickAmt(this,'$500,000')">$500,000</button>
+        <button class="ab" onclick="pickAmt(this,'$750,000')">$750,000</button>
+        <button class="ab" onclick="pickAmt(this,'$1,000,000')">$1,000,000</button>
+        <button class="ab" onclick="pickAmt(this,'custom')">Other</button>
+      </div>
+      <input id="ca" type="text" placeholder="Enter custom amount" style="display:none;width:100%;height:42px;border:0.5px solid var(--border);border-radius:8px;padding:0 14px;font-size:14px;font-family:DM Sans,sans-serif;outline:none">
+    </div>
+    <div class="field"><label>Project interest</label>
+      <select id="proj">
+        <option value="">Select project...</option>
+        <option>Parker Henderson — 46-Unit Duplex, Fort Worth</option>
+        <option>Mayfair Street — 63-Lot Development, Ennis</option>
+        <option>Norman Avenue — 16-Unit, Fort Worth</option>
+        <option>Sanford Road Townhomes — 11-Unit, Arlington</option>
+        <option>5701 Calhoun Road — 8-Unit Luxury, Houston</option>
+        <option>Open to fund allocation</option>
+      </select>
+    </div>
+    <div class="field"><label>Investment timeline</label>
+      <select id="tl">
+        <option value="">When are you ready to invest?</option>
+        <option>Immediately (within 2 weeks)</option>
+        <option>Short-term (30–60 days)</option>
+        <option>Mid-term (60–90 days)</option>
+        <option>Exploring (90+ days)</option>
+      </select>
+    </div>
+    <div class="field"><label>How did you hear about us?</label>
+      <select id="src">
+        <option value="">Select source...</option>
+        <option>Steve Gordon / Ridgeline Capital referral</option>
+        <option>Legacy Capital Network</option>
+        <option>Direct outreach from team</option>
+        <option>LinkedIn</option>
+        <option>Investor network / peer referral</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="disc">
+      <strong>Document acknowledgment</strong><br>
+      By proceeding you confirm receipt of the <strong>Private Placement Memorandum (PPM)</strong> and <strong>Subscription Agreement</strong> for Galbreath Capital, LLC. Investments involve risk. This is not an offer to sell securities in any jurisdiction where prohibited.
+    </div>
+    <div class="ci" id="ackRow" onclick="toggleAck()">
+      <input type="checkbox" id="ack">
+      <span>I have read and acknowledge the PPM and Subscription Agreement</span>
+    </div>
+    <div class="error-msg" id="errMsg">Please complete all fields and acknowledge the documents before submitting.</div>
+    <button class="btn" id="subBtn" onclick="submit()">Submit investor interest →</button>
+    <br>
+    <button class="bbk" onclick="go1()">← Back</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="body hidden" id="p3">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div class="cicon">✦</div>
+      <div class="stitle" style="text-align:center;margin-bottom:0.5rem">Submission received</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6">A confirmation has been sent to <strong id="cemail" style="color:var(--navy)"></strong>.<br>Our team will follow up within 24 hours.</p>
+    </div>
+    <div style="border:0.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:1.25rem">
+      <div class="summary-row"><span style="color:var(--muted)">Investor</span><span id="cname" style="text-align:right;font-weight:500"></span></div>
+      <div class="summary-row"><span style="color:var(--muted)">Amount</span><span id="camt" style="text-align:right;color:#185FA5;font-weight:500"></span></div>
+      <div class="summary-row"><span style="color:var(--muted)">Project</span><span id="cproj" style="text-align:right;font-weight:500;font-size:12px"></span></div>
+      <div class="summary-row"><span style="color:var(--muted)">Timeline</span><span id="ctl" style="text-align:right;font-weight:500;font-size:12px"></span></div>
+    </div>
+    <div class="aibox">
+      <div class="ailbl">Message from Joshua Galbreath</div>
+      <div class="aitxt" id="aimsg"><span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+      <div class="aisig" id="aisig">— Joshua Galbreath, Principal &nbsp;·&nbsp; Galbreath Capital, LLC &nbsp;·&nbsp; Joshua@galbreathcapital.com</div>
+    </div>
+    <div style="text-align:center;padding-top:0.5rem">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:0.05em;text-transform:uppercase">Automated actions triggered</div>
+      <span class="tag">✓ Welcome email sent</span>
+      <span class="tag">✓ Team alerted</span>
+      <span class="tag">✓ Documents delivered</span>
+      <span class="tag">✓ CRM updated</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const WEBHOOK = 'https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-investor-onboarding';
+let amt = '', accVal = '';
+
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('s'+i).className = 'step' + (i===n?' active':i<n?' done':'');
+  });
+  document.getElementById('pf').style.width = (n/3*100) + '%';
+}
+
+function go1() {
+  document.getElementById('p1').classList.remove('hidden');
+  document.getElementById('p2').classList.add('hidden');
+  setStep(1);
+}
+
+function go2() {
+  const fn = document.getElementById('fn').value.trim();
+  const em = document.getElementById('em').value.trim();
+  if (!fn || !em || !accVal) { alert('Please complete your name, email, and accreditation before continuing.'); return; }
+  document.getElementById('p1').classList.add('hidden');
+  document.getElementById('p2').classList.remove('hidden');
+  setStep(2);
+}
+
+function pickAcc(val, id) {
+  accVal = val;
+  ['a1','a2','a3'].forEach(x => document.getElementById(x).classList.remove('sel'));
+  document.getElementById(id).classList.add('sel');
+  document.querySelector('#'+id+' input').checked = true;
+}
+
+function pickAmt(btn, val) {
+  document.querySelectorAll('.ab').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  if (val === 'custom') { amt = ''; document.getElementById('ca').style.display = 'block'; document.getElementById('ca').focus(); }
+  else { amt = val; document.getElementById('ca').style.display = 'none'; }
+}
+
+function toggleAck() {
+  const c = document.getElementById('ack');
+  c.checked = !c.checked;
+  document.getElementById('ackRow').classList.toggle('sel', c.checked);
+}
+
+async function submit() {
+  const finalAmt = amt || document.getElementById('ca').value.trim();
+  const proj = document.getElementById('proj').value;
+  const tl = document.getElementById('tl').value;
+  const ack = document.getElementById('ack').checked;
+  const err = document.getElementById('errMsg');
+
+  if (!finalAmt || !proj || !tl || !ack) {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+
+  const btn = document.getElementById('subBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const data = {
+    firstName: document.getElementById('fn').value.trim(),
+    lastName: document.getElementById('ln').value.trim(),
+    email: document.getElementById('em').value.trim(),
+    phone: document.getElementById('ph').value.trim(),
+    state: document.getElementById('st').value,
+    accreditation: accVal,
+    investmentAmount: finalAmt,
+    project: proj,
+    timeline: tl,
+    source: document.getElementById('src').value,
+    fullName: document.getElementById('fn').value.trim() + ' ' + document.getElementById('ln').value.trim(),
+    submittedAt: new Date().toISOString()
+  };
+
+  try {
+    const response = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    console.log('Webhook response:', response.status);
+  } catch(e) {
+    console.log('Webhook error:', e);
+  }
+
+  document.getElementById('p2').classList.add('hidden');
+  document.getElementById('p3').classList.remove('hidden');
+  setStep(3);
+
+  document.getElementById('cemail').textContent = data.email;
+  document.getElementById('cname').textContent = data.fullName;
+  document.getElementById('camt').textContent = finalAmt;
+  document.getElementById('cproj').textContent = proj.split('—')[0].trim();
+  document.getElementById('ctl').textContent = tl;
+
+  generateAIMessage(data.firstName, finalAmt, proj, tl);
+}
+
+async function generateAIMessage(name, a, proj, tl) {
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `You are Joshua Galbreath, Principal of Galbreath Capital LLC, a Texas real estate development firm raising $17.2M across 5 projects (Reg D 506c, 30% target ROI). Write a warm, personal, institutional-quality welcome message to ${name} who just submitted interest to invest ${a} in ${proj} with a timeline of ${tl}. Acknowledge their specific investment details, express genuine excitement, briefly mention the Texas market opportunity, and state what happens next (team reaches out within 24 hours, subscription agreement and wire instructions coming). 3-4 sentences. No signature line.`
+        }]
+      })
+    });
+    const d = await r.json();
+    const msg = d.content && d.content[0] ? d.content[0].text : 'We are honored to welcome you to Galbreath Capital. Our team will be in touch within 24 hours with your subscription documents and next steps.';
+    document.getElementById('aimsg').textContent = msg;
+    document.getElementById('aisig').style.display = 'block';
+  } catch(e) {
+    document.getElementById('aimsg').textContent = 'We are honored to welcome you to the Galbreath Capital investor community. Our team will reach out within 24 hours with your subscription agreement and next steps.';
+    document.getElementById('aisig').style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
