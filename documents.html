@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galbreath Capital — AI Document Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0B1F3A;--gold:#C9A84C;--gold-lt:#E8D199;--cream:#FAF8F3;--border:#D4C9A8;--muted:#6B6B7A;--text:#1A1A2E;--green:#2A7A2A}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;padding:2rem 1rem}
+.shell{max-width:700px;margin:0 auto}
+.hdr{background:var(--navy);border-radius:14px;padding:1.5rem 2rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.diam{width:9px;height:9px;background:var(--gold);transform:rotate(45deg)}
+.brand-txt{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:15px;letter-spacing:0.2em;text-transform:uppercase}
+.badge{display:flex;align-items:center;gap:6px;background:rgba(42,122,42,0.2);border:0.5px solid rgba(42,122,42,0.4);color:#97C459;font-size:11px;padding:5px 12px;border-radius:20px;letter-spacing:0.06em}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.card{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.25rem}
+.section-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
+.tb{height:38px;border:0.5px solid var(--border);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.tb:hover{border-color:var(--navy);color:var(--text)}
+.tb.on{border-color:var(--gold);background:#FBF8EE;color:#7A5A10;font-weight:500}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;height:42px;border:0.5px solid var(--border);border-radius:8px;padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border 0.2s;appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,31,58,0.05)}
+.field textarea{height:80px;padding:12px 14px;resize:none;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gbtn{width:100%;height:48px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;letter-spacing:0.04em}
+.gbtn:hover{background:#0F2D52;transform:translateY(-1px)}
+.gbtn:disabled{background:#B4B2A9;cursor:not-allowed;transform:none}
+.output{border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.5rem;display:none}
+.out-hdr{background:var(--navy);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.out-label{font-size:11px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;font-weight:500}
+.out-actions{display:flex;gap:8px}
+.abt{background:rgba(201,168,76,0.15);border:0.5px solid rgba(201,168,76,0.3);color:var(--gold-lt);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.abt:hover{background:rgba(201,168,76,0.25)}
+.out-body{padding:2rem;background:#fff}
+.letterhead{text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--border)}
+.lh-co{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--navy);font-weight:600;letter-spacing:0.1em;margin-bottom:4px}
+.lh-sub{font-size:11px;color:var(--muted);letter-spacing:0.05em}
+.doc-date{font-size:13px;color:var(--muted);margin-bottom:0.875rem}
+.doc-to{font-size:14px;color:var(--text);margin-bottom:0.875rem;line-height:1.6}
+.divider{height:0.5px;background:var(--border);margin:1rem 0}
+.doc-text{font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap;min-height:150px}
+.doc-sig{margin-top:1.5rem;padding-top:1.25rem;border-top:0.5px solid var(--border)}
+.sig-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--navy);font-weight:600;margin-bottom:3px}
+.sig-title{font-size:12px;color:var(--muted);line-height:1.6}
+.loading{display:none;align-items:center;justify-content:center;gap:10px;padding:2.5rem;color:var(--muted);font-size:14px}
+.loading.show{display:flex}
+.dots span{animation:blink 1.2s infinite;display:inline-block}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+.hidden{display:none}
+.print-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="hdr">
+    <div class="brand"><div class="diam"></div><span class="brand-txt">Galbreath Capital</span><div class="diam"></div></div>
+    <div class="badge"><div class="ldot"></div>AI Document Generator</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Document type</div>
+    <div class="type-grid" id="typeGrid">
+      <button class="tb on" onclick="pickType(this,'subscription')">Subscription Cover</button>
+      <button class="tb" onclick="pickType(this,'ppm')">PPM Transmittal</button>
+      <button class="tb" onclick="pickType(this,'welcome')">Welcome Letter</button>
+      <button class="tb" onclick="pickType(this,'wire')">Wire Confirmation</button>
+      <button class="tb" onclick="pickType(this,'distribution')">Distribution Letter</button>
+      <button class="tb" onclick="pickType(this,'followup')">Follow-Up Letter</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin-bottom:1rem">Investor details</div>
+    <div class="row2">
+      <div class="field"><label>Investor name</label><input id="iName" type="text" placeholder="Steve Gordon"></div>
+      <div class="field"><label>Investment amount</label><input id="iAmt" type="text" placeholder="$500,000"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Project</label>
+        <select id="iProj">
+          <option>Parker Henderson — 46-Unit Duplex, Fort Worth</option>
+          <option>Mayfair Street — 63-Lot Development, Ennis</option>
+          <option>Norman Avenue — 16-Unit, Fort Worth</option>
+          <option>Sanford Road Townhomes — 11-Unit, Arlington</option>
+          <option>5701 Calhoun Road — 8-Unit Luxury, Houston</option>
+        </select>
+      </div>
+      <div class="field"><label>Tone</label>
+        <select id="iTone">
+          <option value="formal">Formal and institutional</option>
+          <option value="warm">Warm and personal</option>
+          <option value="urgent">Urgent and action-oriented</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Additional context (optional)</label>
+      <textarea id="iCtx" placeholder="e.g. First-time investor, referred by Ridgeline Capital, asking about Q3 close timeline..."></textarea>
+    </div>
+    <button class="gbtn" id="genBtn" onclick="generate()">&#9998; Generate document</button>
+  </div>
+
+  <div class="output" id="output">
+    <div class="out-hdr">
+      <span class="out-label" id="outLabel">Subscription Cover Letter</span>
+      <div class="out-actions">
+        <button class="abt" onclick="copyDoc()">&#128203; Copy</button>
+        <button class="abt" onclick="printDoc()">&#128438; Print</button>
+        <button class="abt" onclick="generate()">&#8635; Regenerate</button>
+      </div>
+    </div>
+    <div class="out-body">
+      <div class="loading" id="loading">Writing document<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+      <div id="docReady" class="hidden">
+        <div class="letterhead">
+          <div class="lh-co">Galbreath Capital, LLC</div>
+          <div class="lh-sub">Texas Real Estate Development &nbsp;&middot;&nbsp; Reg D 506(c) &nbsp;&middot;&nbsp; Joshua@galbreathcapital.com</div>
+        </div>
+        <div class="doc-date" id="dDate"></div>
+        <div class="doc-to" id="dTo"></div>
+        <div class="divider"></div>
+        <div class="doc-text" id="dBody"></div>
+        <div class="doc-sig">
+          <div class="sig-name">Joshua Galbreath</div>
+          <div class="sig-title">Principal &nbsp;&middot;&nbsp; Galbreath Capital, LLC<br>Joshua@galbreathcapital.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="print-hint" id="printHint" style="display:none">Use Print to save as PDF for your records</div>
+</div>
+
+<script>
+let docType = 'subscription';
+const labels = {subscription:'Subscription Cover Letter',ppm:'PPM Transmittal Letter',welcome:'Investor Welcome Letter',wire:'Wire Confirmation Letter',distribution:'Distribution Letter',followup:'Investor Follow-Up Letter'};
+
+function pickType(btn, type){
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  docType = type;
+  document.getElementById('outLabel').textContent = labels[type];
+}
+
+function buildPrompt(){
+  const name = document.getElementById('iName').value.trim() || 'Valued Investor';
+  const amt = document.getElementById('iAmt').value.trim() || '$500,000';
+  const proj = document.getElementById('iProj').value.split('—')[0].trim();
+  const tone = document.getElementById('iTone').value;
+  const ctx = document.getElementById('iCtx').value.trim();
+  const toneDesc = {formal:'formal, institutional, and professional',warm:'warm, personal, and relationship-focused',urgent:'direct, urgent, and action-oriented'}[tone];
+  const ctxLine = ctx ? ` Additional context: ${ctx}` : '';
+  const map = {
+    subscription:`You are Joshua Galbreath, Principal of Galbreath Capital LLC, a Texas real estate development firm (Reg D 506c, 30% target ROI). Write a ${toneDesc} subscription agreement cover letter to ${name} for their ${amt} investment in ${proj}. Acknowledge their commitment, highlight what makes the project compelling, explain next steps (sign subscription agreement, complete W-9, prepare wire), state wire instructions follow upon document return. 3-4 paragraphs. Letter body only — no date, salutation, or signature.${ctxLine}`,
+    ppm:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} PPM transmittal letter to ${name} for their ${amt} interest in ${proj}. Confirm the enclosed Private Placement Memorandum, urge thorough review, highlight 3 key strengths of the offering (Reg D 506c compliance, 30% target ROI, Texas market fundamentals), note your availability for questions. 3 paragraphs. Body only.${ctxLine}`,
+    welcome:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} welcome letter to ${name}, a new accredited investor committing ${amt} to ${proj}. Express genuine excitement, paint a compelling picture of what their capital builds in the Texas market, outline the path forward (documents to wire to close to updates), make them feel part of something significant. 3-4 paragraphs. Body only.${ctxLine}`,
+    wire:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} wire instruction confirmation to ${name} for their ${amt} investment in ${proj}. Confirm all documents have been received, provide wire processing timeline, include a firm fraud warning (always call before wiring — never rely on email alone), confirm what follows receipt of wire (email confirmation, portal access). 2-3 paragraphs. Body only.${ctxLine}`,
+    distribution:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} distribution letter to ${name} for a return distribution from ${proj} related to their ${amt} investment. Express gratitude for their partnership, note the project performance driving this distribution, confirm processing timeline of 5 business days, look forward to continued returns. 3 paragraphs. Body only.${ctxLine}`,
+    followup:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} follow-up letter to ${name} about their interest in ${proj} (${amt} discussed). Reference a prior conversation naturally, create gentle urgency around remaining allocation, offer to answer outstanding questions, suggest a specific next step. Confident and helpful, not pushy. 2-3 paragraphs. Body only.${ctxLine}`
+  };
+  return map[docType];
+}
+
+async function generate(){
+  const name = document.getElementById('iName').value.trim() || 'Valued Investor';
+  const proj = document.getElementById('iProj').value.split('—')[0].trim();
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  document.getElementById('output').style.display = 'block';
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('docReady').classList.add('hidden');
+  document.getElementById('outLabel').textContent = labels[docType];
+  document.getElementById('dDate').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dTo').innerHTML = `<strong>${name}</strong><br>Accredited Investor &nbsp;&middot;&nbsp; ${proj}`;
+
+  try{
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:buildPrompt()}]})
+    });
+    if(!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    const txt = d.content&&d.content[0]&&d.content[0].text;
+    if(!txt) throw new Error('empty');
+    document.getElementById('dBody').textContent = txt;
+  }catch(e){
+    document.getElementById('dBody').textContent = 'Unable to generate at this time. Please check your connection and try again.';
+  }
+
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('docReady').classList.remove('hidden');
+  document.getElementById('printHint').style.display = 'block';
+  btn.disabled = false;
+  btn.textContent = '✎ Generate document';
+}
+
+function copyDoc(){
+  const txt = document.getElementById('dBody').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    alert('Document copied to clipboard — paste into Gmail or Word to send.');
+  });
+}
+
+function printDoc(){
+  window.print();
+}
+</script>
+</body>
+</html>
