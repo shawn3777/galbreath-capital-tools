@@ -19,7 +19,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;p
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .card{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.25rem}
 .section-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
-.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .tb{height:38px;border:0.5px solid var(--border);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.2s}
 .tb:hover{border-color:var(--navy);color:var(--text)}
 .tb.on{border-color:var(--gold);background:#FBF8EE;color:#7A5A10;font-weight:500}
@@ -140,6 +140,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;p
 </div>
 
 <script>
+const WEBHOOK = 'https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-document-generator';
 let docType = 'subscription';
 const labels = {subscription:'Subscription Cover Letter',ppm:'PPM Transmittal Letter',welcome:'Investor Welcome Letter',wire:'Wire Confirmation Letter',distribution:'Distribution Letter',followup:'Investor Follow-Up Letter'};
 
@@ -148,25 +149,6 @@ function pickType(btn, type){
   btn.classList.add('on');
   docType = type;
   document.getElementById('outLabel').textContent = labels[type];
-}
-
-function buildPrompt(){
-  const name = document.getElementById('iName').value.trim() || 'Valued Investor';
-  const amt = document.getElementById('iAmt').value.trim() || '$500,000';
-  const proj = document.getElementById('iProj').value.split('—')[0].trim();
-  const tone = document.getElementById('iTone').value;
-  const ctx = document.getElementById('iCtx').value.trim();
-  const toneDesc = {formal:'formal, institutional, and professional',warm:'warm, personal, and relationship-focused',urgent:'direct, urgent, and action-oriented'}[tone];
-  const ctxLine = ctx ? ` Additional context: ${ctx}` : '';
-  const map = {
-    subscription:`You are Joshua Galbreath, Principal of Galbreath Capital LLC, a Texas real estate development firm (Reg D 506c, 30% target ROI). Write a ${toneDesc} subscription agreement cover letter to ${name} for their ${amt} investment in ${proj}. Acknowledge their commitment, highlight what makes the project compelling, explain next steps (sign subscription agreement, complete W-9, prepare wire), state wire instructions follow upon document return. 3-4 paragraphs. Letter body only — no date, salutation, or signature.${ctxLine}`,
-    ppm:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} PPM transmittal letter to ${name} for their ${amt} interest in ${proj}. Confirm the enclosed Private Placement Memorandum, urge thorough review, highlight 3 key strengths of the offering (Reg D 506c compliance, 30% target ROI, Texas market fundamentals), note your availability for questions. 3 paragraphs. Body only.${ctxLine}`,
-    welcome:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} welcome letter to ${name}, a new accredited investor committing ${amt} to ${proj}. Express genuine excitement, paint a compelling picture of what their capital builds in the Texas market, outline the path forward (documents to wire to close to updates), make them feel part of something significant. 3-4 paragraphs. Body only.${ctxLine}`,
-    wire:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} wire instruction confirmation to ${name} for their ${amt} investment in ${proj}. Confirm all documents have been received, provide wire processing timeline, include a firm fraud warning (always call before wiring — never rely on email alone), confirm what follows receipt of wire (email confirmation, portal access). 2-3 paragraphs. Body only.${ctxLine}`,
-    distribution:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} distribution letter to ${name} for a return distribution from ${proj} related to their ${amt} investment. Express gratitude for their partnership, note the project performance driving this distribution, confirm processing timeline of 5 business days, look forward to continued returns. 3 paragraphs. Body only.${ctxLine}`,
-    followup:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${toneDesc} follow-up letter to ${name} about their interest in ${proj} (${amt} discussed). Reference a prior conversation naturally, create gentle urgency around remaining allocation, offer to answer outstanding questions, suggest a specific next step. Confident and helpful, not pushy. 2-3 paragraphs. Body only.${ctxLine}`
-  };
-  return map[docType];
 }
 
 async function generate(){
@@ -180,21 +162,28 @@ async function generate(){
   document.getElementById('docReady').classList.add('hidden');
   document.getElementById('outLabel').textContent = labels[docType];
   document.getElementById('dDate').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  document.getElementById('dTo').innerHTML = `<strong>${name}</strong><br>Accredited Investor &nbsp;&middot;&nbsp; ${proj}`;
+  document.getElementById('dTo').innerHTML = '<strong>'+name+'</strong><br>Accredited Investor &nbsp;&middot;&nbsp; '+proj;
 
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:buildPrompt()}]})
+    const r = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        docType: docType,
+        name: document.getElementById('iName').value.trim() || 'Valued Investor',
+        amount: document.getElementById('iAmt').value.trim() || '$500,000',
+        project: document.getElementById('iProj').value,
+        tone: document.getElementById('iTone').value,
+        context: document.getElementById('iCtx').value.trim()
+      })
     });
     if(!r.ok) throw new Error(r.status);
     const d = await r.json();
-    const txt = d.content&&d.content[0]&&d.content[0].text;
+    const txt = d.document;
     if(!txt) throw new Error('empty');
     document.getElementById('dBody').textContent = txt;
   }catch(e){
-    document.getElementById('dBody').textContent = 'Unable to generate at this time. Please check your connection and try again.';
+    document.getElementById('dBody').textContent = 'Unable to generate at this time. Please try again in a moment.';
   }
 
   document.getElementById('loading').classList.remove('show');
