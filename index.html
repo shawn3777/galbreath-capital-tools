@@ -200,7 +200,7 @@ async function generate(){
       body:JSON.stringify(payload)
     });
     const data = await resp.json();
-    const body = data?.content?.[0]?.text || data?.text || data?.output || data?.message || '';
+    const body = data?.document || data?.content?.[0]?.text || data?.text || '';
     if(!body) throw new Error('empty');
 
     document.getElementById('dDate').textContent = today;
