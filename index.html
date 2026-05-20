@@ -153,7 +153,7 @@
 </div>
 
 <script>
-const API_KEY = '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';
+const WEBHOOK = 'https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-document-generator';
 
 const labels = {
   subscription:'Subscription Cover Letter',
@@ -172,28 +172,13 @@ function pickType(btn,type){
   document.getElementById('outLabel').textContent = labels[type];
 }
 
-function buildPrompt(){
+function buildPayload(){
   const name = document.getElementById('iName').value.trim() || 'Valued Investor';
   const amt  = document.getElementById('iAmt').value.trim() || '$250,000';
   const proj = document.getElementById('iProj').value;
   const tone = document.getElementById('iTone').value;
   const ctx  = document.getElementById('iCtx').value.trim();
-  const toneMap = {
-    formal:'formal, institutional, and professional',
-    warm:'warm, personal, and relationship-focused',
-    urgent:'direct, confident, and action-oriented'
-  };
-  const td = toneMap[tone];
-  const cx = ctx ? ` Additional context: ${ctx}.` : '';
-  const prompts = {
-    subscription:`You are Joshua Galbreath, Principal of Galbreath Capital LLC, a Texas real estate developer raising capital under Reg D 506(c) targeting 30% ROI. Write a ${td} subscription cover letter addressed to ${name} for their ${amt} commitment to ${proj}. Acknowledge their commitment warmly, briefly highlight why the project is compelling, and outline next steps (return signed subscription agreement, complete W-9, prepare wire per instructions to follow). 3 to 4 paragraphs. Write the body only — no date, salutation, or signature.${cx}`,
-    ppm:`You are Joshua Galbreath, Principal of Galbreath Capital LLC (Reg D 506(c)). Write a ${td} PPM transmittal letter to ${name} for their ${amt} interest in ${proj}. Direct them to read the PPM carefully, confirm accredited investor status, complete the subscription agreement and W-9, and contact you with questions. 2 to 3 paragraphs. Body only.${cx}`,
-    welcome:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${td} investor welcome letter to ${name} confirming their ${amt} investment in ${proj}. Reference the 30% ROI target, mention milestone update schedule (months 3, 6, 9, 12), and express genuine enthusiasm for the partnership. 3 paragraphs. Body only.${cx}`,
-    wire:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${td} wire confirmation letter to ${name} confirming receipt of their ${amt} wire for ${proj}. Confirm funds received, note the deed of trust will be recorded within 10 business days, and outline next milestone communication. 2 paragraphs. Body only.${cx}`,
-    distribution:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${td} distribution letter to ${name} announcing their return on ${amt} invested in ${proj}. Reference the 30% return, thank them sincerely for their trust and patience, and invite conversation about reinvestment opportunities. 2 to 3 paragraphs. Body only.${cx}`,
-    followup:`You are Joshua Galbreath, Principal of Galbreath Capital LLC. Write a ${td} investor follow-up letter to ${name} who expressed interest in a ${amt} position in ${proj}. Reference prior conversation naturally, reinforce the investment opportunity compellingly, and include a clear call to action to move forward. 2 to 3 paragraphs. Body only.${cx}`
-  };
-  return { prompt:prompts[docType], name, proj };
+  return { docType, name, amount:amt, project:proj, tone, context:ctx };
 }
 
 async function generate(){
@@ -205,29 +190,21 @@ async function generate(){
   document.getElementById('docReady').classList.add('hidden');
   document.getElementById('printHint').style.display = 'none';
 
-  const {prompt, name, proj} = buildPrompt();
+  const payload = buildPayload();
   const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
 
   try{
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    const resp = await fetch(WEBHOOK,{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':API_KEY,
-        'anthropic-version':'2023-06-01'
-      },
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
     });
     const data = await resp.json();
-    const body = data?.content?.[0]?.text || '';
+    const body = data?.text || data?.output || data?.message || data?.content || '';
     if(!body) throw new Error('empty');
 
     document.getElementById('dDate').textContent = today;
-    document.getElementById('dTo').innerHTML = `<strong>${name}</strong><span>Accredited Investor &nbsp;·&nbsp; ${proj.split('—')[0].trim()}</span>`;
+    document.getElementById('dTo').innerHTML = `<strong>${payload.name}</strong><span>Accredited Investor &nbsp;·&nbsp; ${payload.project.split('—')[0].trim()}</span>`;
     document.getElementById('dBody').textContent = body.trim();
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('docReady').classList.remove('hidden');
@@ -236,7 +213,7 @@ async function generate(){
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('docReady').classList.remove('hidden');
     document.getElementById('dDate').textContent = today;
-    document.getElementById('dTo').innerHTML = `<strong>${name}</strong>`;
+    document.getElementById('dTo').innerHTML = `<strong>${payload.name}</strong>`;
     document.getElementById('dBody').textContent = 'Could not generate at this time. Please try again in a moment.';
   }
   btn.disabled = false;
