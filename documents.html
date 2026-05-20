@@ -1,207 +1,448 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galbreath Capital — AI Document Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galbreath Capital — Investor Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#0B1F3A;--gold:#C9A84C;--gold-lt:#E8D199;--cream:#FAF8F3;--border:#D4C9A8;--muted:#6B6B7A;--text:#1A1A2E;--green:#2A7A2A}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;padding:2rem 1rem}
-.shell{max-width:700px;margin:0 auto}
-.hdr{background:var(--navy);border-radius:14px;padding:1.5rem 2rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:10px}
-.diam{width:9px;height:9px;background:var(--gold);transform:rotate(45deg)}
-.brand-txt{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:15px;letter-spacing:0.2em;text-transform:uppercase}
-.badge{display:flex;align-items:center;gap:6px;background:rgba(42,122,42,0.2);border:0.5px solid rgba(42,122,42,0.4);color:#97C459;font-size:11px;padding:5px 12px;border-radius:20px;letter-spacing:0.06em}
-.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.card{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.25rem}
-.section-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
-.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.tb{height:38px;border:0.5px solid var(--border);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.2s}
-.tb:hover{border-color:var(--navy);color:var(--text)}
-.tb.on{border-color:var(--gold);background:#FBF8EE;color:#7A5A10;font-weight:500}
-.field{margin-bottom:1rem}
-.field label{display:block;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
-.field input,.field select,.field textarea{width:100%;height:42px;border:0.5px solid var(--border);border-radius:8px;padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border 0.2s;appearance:none}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,31,58,0.05)}
-.field textarea{height:80px;padding:12px 14px;resize:none;line-height:1.5}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.gbtn{width:100%;height:48px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;letter-spacing:0.04em}
-.gbtn:hover{background:#0F2D52;transform:translateY(-1px)}
-.gbtn:disabled{background:#B4B2A9;cursor:not-allowed;transform:none}
-.output{border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin-top:1.5rem;display:none}
-.out-hdr{background:var(--navy);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
-.out-label{font-size:11px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;font-weight:500}
-.out-actions{display:flex;gap:8px}
-.abt{background:rgba(201,168,76,0.15);border:0.5px solid rgba(201,168,76,0.3);color:var(--gold-lt);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
-.abt:hover{background:rgba(201,168,76,0.25)}
-.out-body{padding:2rem;background:#fff}
-.letterhead{text-align:center;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--border)}
-.lh-co{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--navy);font-weight:600;letter-spacing:0.1em;margin-bottom:4px}
-.lh-sub{font-size:11px;color:var(--muted);letter-spacing:0.05em}
-.doc-date{font-size:13px;color:var(--muted);margin-bottom:0.875rem}
-.doc-to{font-size:14px;color:var(--text);margin-bottom:0.875rem;line-height:1.6}
-.divider{height:0.5px;background:var(--border);margin:1rem 0}
-.doc-text{font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap;min-height:150px}
-.doc-sig{margin-top:1.5rem;padding-top:1.25rem;border-top:0.5px solid var(--border)}
-.sig-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--navy);font-weight:600;margin-bottom:3px}
-.sig-title{font-size:12px;color:var(--muted);line-height:1.6}
-.loading{display:none;align-items:center;justify-content:center;gap:10px;padding:2.5rem;color:var(--muted);font-size:14px}
-.loading.show{display:flex}
-.dots span{animation:blink 1.2s infinite;display:inline-block}
-.dots span:nth-child(2){animation-delay:0.2s}
-.dots span:nth-child(3){animation-delay:0.4s}
-@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
-.hidden{display:none}
-.print-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem}
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0f2137;--gold:#c9a84c;--gold-light:#e8d5a3;--cream:#f9f6f0;
+    --white:#ffffff;--border:#ddd5c8;--text:#2c2c2c;--muted:#7a7060;--light:#f2ede5;
+    --green:#2d7a4f;--red:#c0392b;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--text);min-height:100vh}
+  .hdr{background:var(--navy);padding:20px 24px;display:flex;align-items:center;justify-content:space-between}
+  .hdr-brand{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;color:var(--white);letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  .hdr-brand::before,.hdr-brand::after{content:'◆';color:var(--gold);font-size:10px}
+  .hdr-link{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);color:var(--gold-light);font-size:11px;padding:6px 14px;border-radius:20px;text-decoration:none;letter-spacing:.06em;transition:all .2s}
+  .hdr-link:hover{background:rgba(201,168,76,.25)}
+  .progress{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px}
+  .steps{display:flex;max-width:600px;margin:0 auto}
+  .step{flex:1;padding:18px 0;text-align:center;position:relative;cursor:default}
+  .step::after{content:'';position:absolute;top:50%;right:0;transform:translateY(-50%);width:1px;height:30px;background:var(--border)}
+  .step:last-child::after{display:none}
+  .step-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--white);color:var(--muted);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+  .step-label{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .step.active .step-num{background:var(--navy);border-color:var(--navy);color:var(--white)}
+  .step.active .step-label{color:var(--navy);font-weight:500}
+  .step.done .step-num{background:var(--green);border-color:var(--green);color:var(--white)}
+  .step.done .step-num::before{content:'✓'}
+  .gold-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));width:0;transition:width .4s ease}
+  .main{max-width:600px;margin:0 auto;padding:32px 24px}
+  .live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(45,122,79,.08);border:1px solid rgba(45,122,79,.2);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--green);margin-bottom:24px;letter-spacing:.04em}
+  .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--navy);margin-bottom:6px}
+  .section-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.5}
+  .card{background:var(--white);border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(15,33,55,.06);margin-bottom:16px}
+  .card-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:500;margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field.full{grid-column:1/-1}
+  label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:500}
+  input,select{border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border-color .18s;width:100%}
+  input:focus,select:focus{border-color:var(--navy)}
+  input.error,select.error{border-color:var(--red)}
+  .check-group{display:flex;flex-direction:column;gap:10px}
+  .check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .18s;background:var(--cream)}
+  .check-item:hover{border-color:var(--navy)}
+  .check-item.selected{border-color:var(--navy);background:rgba(15,33,55,.04)}
+  .check-item input[type=checkbox]{width:16px;height:16px;margin-top:1px;accent-color:var(--navy);flex-shrink:0;cursor:pointer}
+  .check-item input[type=radio]{width:16px;height:16px;margin-top:1px;accent-color:var(--navy);flex-shrink:0;cursor:pointer}
+  .check-item-text{font-size:13px;color:var(--text);line-height:1.4}
+  .check-item-sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .radio-group{display:flex;flex-wrap:wrap;gap:8px}
+  .radio-pill{border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .18s;background:var(--cream);user-select:none}
+  .radio-pill:hover{border-color:var(--navy);color:var(--navy)}
+  .radio-pill.selected{background:var(--navy);border-color:var(--navy);color:var(--white)}
+  .btn-row{display:flex;gap:12px;margin-top:28px}
+  .btn-primary{flex:1;background:var(--navy);color:var(--white);border:none;border-radius:9px;padding:15px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;letter-spacing:.05em;transition:opacity .18s}
+  .btn-primary:hover{opacity:.86}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed}
+  .btn-back{background:none;border:1px solid var(--border);border-radius:9px;padding:15px 20px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;transition:all .18s}
+  .btn-back:hover{border-color:var(--navy);color:var(--navy)}
+  .summary-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+  .summary-row:last-child{border-bottom:none}
+  .summary-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .summary-value{font-size:13px;color:var(--text);font-weight:500;text-align:right;max-width:60%}
+  .disclosure{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:16px;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+  .confirm-check{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+  .confirm-check input{width:16px;height:16px;margin-top:2px;accent-color:var(--navy);flex-shrink:0;cursor:pointer}
+  .confirm-check label{font-size:12px;color:var(--text);line-height:1.5;cursor:pointer}
+  .success{display:none;text-align:center;padding:40px 20px}
+  .success-icon{width:64px;height:64px;background:rgba(45,122,79,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px}
+  .success-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--navy);margin-bottom:10px}
+  .success-sub{font-size:13px;color:var(--muted);line-height:1.7;max-width:400px;margin:0 auto 28px}
+  .success-ref{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:14px 20px;font-size:12px;color:var(--muted);display:inline-block}
+  .success-ref strong{color:var(--navy);display:block;font-size:14px;margin-bottom:4px}
+  .err-msg{font-size:11px;color:var(--red);margin-top:4px;display:none}
+  .err-msg.show{display:block}
+  .hidden{display:none}
+  @media(max-width:520px){
+    .grid{grid-template-columns:1fr}
+    .hdr{padding:16px}
+  }
 </style>
 </head>
 <body>
-<div class="shell">
-  <div class="hdr">
-    <div class="brand"><div class="diam"></div><span class="brand-txt">Galbreath Capital</span><div class="diam"></div></div>
-    <div class="badge"><div class="ldot"></div>AI Document Generator</div>
-  </div>
 
-  <div class="card">
-    <div class="section-title">Document type</div>
-    <div class="type-grid" id="typeGrid">
-      <button class="tb on" onclick="pickType(this,'subscription')">Subscription Cover</button>
-      <button class="tb" onclick="pickType(this,'ppm')">PPM Transmittal</button>
-      <button class="tb" onclick="pickType(this,'welcome')">Welcome Letter</button>
-      <button class="tb" onclick="pickType(this,'wire')">Wire Confirmation</button>
-      <button class="tb" onclick="pickType(this,'distribution')">Distribution Letter</button>
-      <button class="tb" onclick="pickType(this,'followup')">Follow-Up Letter</button>
+<div class="hdr">
+  <div class="hdr-brand">Galbreath Capital</div>
+  <a href="index.html" class="hdr-link">AI Document Generator</a>
+</div>
+
+<div class="gold-bar" id="goldBar"></div>
+
+<div class="progress">
+  <div class="steps">
+    <div class="step active" id="step1tab">
+      <div class="step-num">1</div>
+      <div class="step-label">Profile</div>
+    </div>
+    <div class="step" id="step2tab">
+      <div class="step-num">2</div>
+      <div class="step-label">Investment</div>
+    </div>
+    <div class="step" id="step3tab">
+      <div class="step-num">3</div>
+      <div class="step-label">Confirm</div>
     </div>
   </div>
+</div>
 
-  <div class="card">
-    <div class="section-title" style="margin-bottom:1rem">Investor details</div>
-    <div class="row2">
-      <div class="field"><label>Investor name</label><input id="iName" type="text" placeholder="Steve Gordon"></div>
-      <div class="field"><label>Investment amount</label><input id="iAmt" type="text" placeholder="$500,000"></div>
-    </div>
-    <div class="row2">
-      <div class="field"><label>Project</label>
-        <select id="iProj">
-          <option>Parker Henderson — 46-Unit Duplex, Fort Worth</option>
-          <option>Mayfair Street — 63-Lot Development, Ennis</option>
-          <option>Norman Avenue — 16-Unit, Fort Worth</option>
-          <option>Sanford Road Townhomes — 11-Unit, Arlington</option>
-          <option>5701 Calhoun Road — 8-Unit Luxury, Houston</option>
-        </select>
-      </div>
-      <div class="field"><label>Tone</label>
-        <select id="iTone">
-          <option value="formal">Formal and institutional</option>
-          <option value="warm">Warm and personal</option>
-          <option value="urgent">Urgent and action-oriented</option>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label>Additional context (optional)</label>
-      <textarea id="iCtx" placeholder="e.g. First-time investor, referred by Ridgeline Capital, asking about Q3 close timeline..."></textarea>
-    </div>
-    <button class="gbtn" id="genBtn" onclick="generate()">&#9998; Generate document</button>
-  </div>
+<div class="main">
 
-  <div class="output" id="output">
-    <div class="out-hdr">
-      <span class="out-label" id="outLabel">Subscription Cover Letter</span>
-      <div class="out-actions">
-        <button class="abt" onclick="copyDoc()">&#128203; Copy</button>
-        <button class="abt" onclick="printDoc()">&#128438; Print</button>
-        <button class="abt" onclick="generate()">&#8635; Regenerate</button>
-      </div>
-    </div>
-    <div class="out-body">
-      <div class="loading" id="loading">Writing document<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
-      <div id="docReady" class="hidden">
-        <div class="letterhead">
-          <div class="lh-co">Galbreath Capital, LLC</div>
-          <div class="lh-sub">Texas Real Estate Development &nbsp;&middot;&nbsp; Reg D 506(c) &nbsp;&middot;&nbsp; Joshua@galbreathcapital.com</div>
+  <!-- STEP 1 -->
+  <div id="page1">
+    <div class="live-badge"><span class="live-dot"></span>Live &nbsp;·&nbsp; Submissions sent directly to Galbreath Capital</div>
+    <div class="section-title">Your investor profile</div>
+    <div class="section-sub">Please provide your contact information and accreditation basis to begin the onboarding process.</div>
+    <div class="card">
+      <div class="card-title">Contact Information</div>
+      <div class="grid">
+        <div class="field">
+          <label>First Name</label>
+          <input id="firstName" type="text" placeholder="First name">
+          <span class="err-msg" id="firstNameErr">Required</span>
         </div>
-        <div class="doc-date" id="dDate"></div>
-        <div class="doc-to" id="dTo"></div>
-        <div class="divider"></div>
-        <div class="doc-text" id="dBody"></div>
-        <div class="doc-sig">
-          <div class="sig-name">Joshua Galbreath</div>
-          <div class="sig-title">Principal &nbsp;&middot;&nbsp; Galbreath Capital, LLC<br>Joshua@galbreathcapital.com</div>
+        <div class="field">
+          <label>Last Name</label>
+          <input id="lastName" type="text" placeholder="Last name">
+          <span class="err-msg" id="lastNameErr">Required</span>
+        </div>
+        <div class="field full">
+          <label>Email Address</label>
+          <input id="email" type="email" placeholder="you@email.com">
+          <span class="err-msg" id="emailErr">Valid email required</span>
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input id="phone" type="tel" placeholder="(214) 555-0100">
+          <span class="err-msg" id="phoneErr">Required</span>
+        </div>
+        <div class="field">
+          <label>State of Residence</label>
+          <select id="state">
+            <option value="">Select state...</option>
+            <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
+          </select>
+          <span class="err-msg" id="stateErr">Required</span>
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-title">Accreditation Basis</div>
+      <div class="check-group" id="accredGroup">
+        <label class="check-item" id="acc1">
+          <input type="checkbox" value="income" onchange="toggleCheck(this,'acc1')">
+          <div>
+            <div class="check-item-text">Income — $200K+ individual / $300K+ joint (last 2 years)</div>
+            <div class="check-item-sub">With reasonable expectation of same this year</div>
+          </div>
+        </label>
+        <label class="check-item" id="acc2">
+          <input type="checkbox" value="networth" onchange="toggleCheck(this,'acc2')">
+          <div>
+            <div class="check-item-text">Net worth — $1M+ excluding primary residence</div>
+            <div class="check-item-sub">Individual or joint with spouse</div>
+          </div>
+        </label>
+        <label class="check-item" id="acc3">
+          <input type="checkbox" value="entity" onchange="toggleCheck(this,'acc3')">
+          <div>
+            <div class="check-item-text">Entity — $5M+ in assets or all accredited members</div>
+            <div class="check-item-sub">Trust, LLC, corporation, or partnership</div>
+          </div>
+        </label>
+      </div>
+      <span class="err-msg" id="accredErr" style="margin-top:10px">Please select at least one accreditation basis</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goStep2()">Continue →</button>
+    </div>
   </div>
-  <div class="print-hint" id="printHint" style="display:none">Use Print to save as PDF for your records</div>
+
+  <!-- STEP 2 -->
+  <div id="page2" class="hidden">
+    <div class="section-title">Investment details</div>
+    <div class="section-sub">Select your project of interest, investment amount, and entity type.</div>
+    <div class="card">
+      <div class="card-title">Project Selection</div>
+      <div class="check-group">
+        <label class="check-item" id="proj1">
+          <input type="radio" name="project" value="Parker Henderson — 46-Unit Duplex, Fort Worth" onchange="selectProject('proj1')">
+          <div>
+            <div class="check-item-text">Parker Henderson — 46-Unit Duplex</div>
+            <div class="check-item-sub">Fort Worth, TX &nbsp;·&nbsp; Target raise: $3.2M &nbsp;·&nbsp; 30% ROI</div>
+          </div>
+        </label>
+        <label class="check-item" id="proj2">
+          <input type="radio" name="project" value="Mayfair Street — 63-Lot SF, Ennis" onchange="selectProject('proj2')">
+          <div>
+            <div class="check-item-text">Mayfair Street — 63-Lot Hybrid Community</div>
+            <div class="check-item-sub">Ennis, TX &nbsp;·&nbsp; Healthcare/Housing &nbsp;·&nbsp; 30% ROI</div>
+          </div>
+        </label>
+        <label class="check-item" id="proj3">
+          <input type="radio" name="project" value="Norman Avenue — 16-Unit Fourplex, Fort Worth" onchange="selectProject('proj3')">
+          <div>
+            <div class="check-item-text">Norman Avenue — 16-Unit Fourplex</div>
+            <div class="check-item-sub">Fort Worth, TX &nbsp;·&nbsp; Target raise: $1.8M &nbsp;·&nbsp; 30% ROI</div>
+          </div>
+        </label>
+        <label class="check-item" id="proj4">
+          <input type="radio" name="project" value="Sanford Road Townhomes — 11-Unit, Arlington" onchange="selectProject('proj4')">
+          <div>
+            <div class="check-item-text">Sanford Road Townhomes — 11-Unit</div>
+            <div class="check-item-sub">Arlington, TX &nbsp;·&nbsp; Target raise: $1.4M &nbsp;·&nbsp; 30% ROI</div>
+          </div>
+        </label>
+        <label class="check-item" id="proj5">
+          <input type="radio" name="project" value="5701 Calhoun Road — 8-Unit Luxury Mid-Rise, Houston" onchange="selectProject('proj5')">
+          <div>
+            <div class="check-item-text">5701 Calhoun Road — 8-Unit Luxury Mid-Rise</div>
+            <div class="check-item-sub">Houston, TX &nbsp;·&nbsp; Target raise: $2.1M &nbsp;·&nbsp; 30% ROI</div>
+          </div>
+        </label>
+        <label class="check-item" id="proj6">
+          <input type="radio" name="project" value="Galbreath Capital Portfolio Fund (All Projects)" onchange="selectProject('proj6')">
+          <div>
+            <div class="check-item-text">Portfolio Fund — All Projects</div>
+            <div class="check-item-sub">Diversified across all 5 Texas projects &nbsp;·&nbsp; $17.21M total raise</div>
+          </div>
+        </label>
+      </div>
+      <span class="err-msg" id="projErr" style="margin-top:10px">Please select a project</span>
+    </div>
+    <div class="card">
+      <div class="card-title">Investment Details</div>
+      <div class="grid">
+        <div class="field">
+          <label>Investment Amount</label>
+          <input id="amount" type="text" placeholder="e.g. $250,000">
+          <span class="err-msg" id="amountErr">Required</span>
+        </div>
+        <div class="field">
+          <label>Investing As</label>
+          <select id="entityType">
+            <option value="">Select...</option>
+            <option>Individual</option>
+            <option>Joint (with spouse)</option>
+            <option>LLC</option>
+            <option>Trust</option>
+            <option>Corporation</option>
+            <option>Self-Directed IRA</option>
+            <option>Partnership</option>
+          </select>
+          <span class="err-msg" id="entityErr">Required</span>
+        </div>
+        <div class="field full">
+          <label>How did you hear about us?</label>
+          <div class="radio-group" id="sourceGroup">
+            <div class="radio-pill" onclick="selectSource(this,'Referral')">Referral</div>
+            <div class="radio-pill" onclick="selectSource(this,'LinkedIn')">LinkedIn</div>
+            <div class="radio-pill" onclick="selectSource(this,'Email')">Email</div>
+            <div class="radio-pill" onclick="selectSource(this,'Event')">Event</div>
+            <div class="radio-pill" onclick="selectSource(this,'Social Media')">Social Media</div>
+            <div class="radio-pill" onclick="selectSource(this,'Other')">Other</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep1()">← Back</button>
+      <button class="btn-primary" onclick="goStep3()">Review & Confirm →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="page3" class="hidden">
+    <div class="section-title">Review & confirm</div>
+    <div class="section-sub">Please review your information before submitting to Galbreath Capital.</div>
+    <div class="card">
+      <div class="card-title">Your Submission</div>
+      <div id="summaryContent"></div>
+    </div>
+    <div class="disclosure">
+      <strong style="display:block;margin-bottom:6px;color:var(--text)">Reg D 506(c) — Accredited Investors Only</strong>
+      This offering is made pursuant to Rule 506(c) of Regulation D under the Securities Act of 1933. This is not an offer to sell securities. Securities may only be offered and sold to accredited investors. Past performance is not indicative of future results. All investments carry risk including the possible loss of principal.
+    </div>
+    <div class="confirm-check">
+      <input type="checkbox" id="confirmCheck" onchange="toggleConfirmBtn()">
+      <label for="confirmCheck">I confirm that I am an accredited investor as defined under SEC Rule 501 and that the information I have provided is accurate and complete.</label>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goStep2Back()">← Back</button>
+      <button class="btn-primary" id="submitBtn" onclick="submitForm()" disabled>Submit to Galbreath Capital</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="successPage">
+    <div class="success-icon">✓</div>
+    <div class="success-title">Submission Received</div>
+    <div class="success-sub">Thank you for your interest in Galbreath Capital. Joshua Galbreath will review your submission and be in touch within 1–2 business days to discuss next steps.</div>
+    <div class="success-ref">
+      <strong id="refName"></strong>
+      Your submission has been sent to Joshua@galbreathcapital.com
+    </div>
+  </div>
+
 </div>
 
 <script>
 const WEBHOOK = 'https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-document-generator';
-let docType = 'subscription';
-const labels = {subscription:'Subscription Cover Letter',ppm:'PPM Transmittal Letter',welcome:'Investor Welcome Letter',wire:'Wire Confirmation Letter',distribution:'Distribution Letter',followup:'Investor Follow-Up Letter'};
+let formData = {};
+let selectedSource = '';
 
-function pickType(btn, type){
-  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  docType = type;
-  document.getElementById('outLabel').textContent = labels[type];
-}
+function setBar(pct){ document.getElementById('goldBar').style.width = pct+'%'; }
 
-async function generate(){
-  const name = document.getElementById('iName').value.trim() || 'Valued Investor';
-  const proj = document.getElementById('iProj').value.split('—')[0].trim();
-  const btn = document.getElementById('genBtn');
-  btn.disabled = true;
-  btn.textContent = 'Generating...';
-  document.getElementById('output').style.display = 'block';
-  document.getElementById('loading').classList.add('show');
-  document.getElementById('docReady').classList.add('hidden');
-  document.getElementById('outLabel').textContent = labels[docType];
-  document.getElementById('dDate').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  document.getElementById('dTo').innerHTML = '<strong>'+name+'</strong><br>Accredited Investor &nbsp;&middot;&nbsp; '+proj;
-
-  try{
-    const r = await fetch(WEBHOOK, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        docType: docType,
-        name: document.getElementById('iName').value.trim() || 'Valued Investor',
-        amount: document.getElementById('iAmt').value.trim() || '$500,000',
-        project: document.getElementById('iProj').value,
-        tone: document.getElementById('iTone').value,
-        context: document.getElementById('iCtx').value.trim()
-      })
-    });
-    if(!r.ok) throw new Error(r.status);
-    const d = await r.json();
-    const txt = d.document;
-    if(!txt) throw new Error('empty');
-    document.getElementById('dBody').textContent = txt;
-  }catch(e){
-    document.getElementById('dBody').textContent = 'Unable to generate at this time. Please try again in a moment.';
-  }
-
-  document.getElementById('loading').classList.remove('show');
-  document.getElementById('docReady').classList.remove('hidden');
-  document.getElementById('printHint').style.display = 'block';
-  btn.disabled = false;
-  btn.textContent = '✎ Generate document';
-}
-
-function copyDoc(){
-  const txt = document.getElementById('dBody').textContent;
-  navigator.clipboard.writeText(txt).then(()=>{
-    alert('Document copied to clipboard — paste into Gmail or Word to send.');
+function setStepTabs(active){
+  [1,2,3].forEach(i=>{
+    const t = document.getElementById('step'+i+'tab');
+    t.classList.remove('active','done');
+    if(i < active) t.classList.add('done');
+    if(i === active) t.classList.add('active');
   });
 }
 
-function printDoc(){
-  window.print();
+function toggleCheck(cb,id){
+  document.getElementById(id).classList.toggle('selected',cb.checked);
+}
+
+function selectProject(id){
+  ['proj1','proj2','proj3','proj4','proj5','proj6'].forEach(p=>{
+    document.getElementById(p).classList.remove('selected');
+  });
+  document.getElementById(id).classList.add('selected');
+}
+
+function selectSource(el,val){
+  document.querySelectorAll('.radio-pill').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSource = val;
+}
+
+function showErr(id,show){
+  const el = document.getElementById(id);
+  if(el){ el.classList.toggle('show',show); }
+}
+function markField(id,error){
+  const el = document.getElementById(id);
+  if(el){ el.classList.toggle('error',error); }
+}
+
+function goStep2(){
+  let valid = true;
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const em = document.getElementById('email').value.trim();
+  const ph = document.getElementById('phone').value.trim();
+  const st = document.getElementById('state').value;
+  const accreds = [...document.querySelectorAll('#accredGroup input:checked')];
+  if(!fn){ markField('firstName',true); showErr('firstNameErr',true); valid=false; }
+  else{ markField('firstName',false); showErr('firstNameErr',false); }
+  if(!ln){ markField('lastName',true); showErr('lastNameErr',true); valid=false; }
+  else{ markField('lastName',false); showErr('lastNameErr',false); }
+  if(!em||!em.includes('@')){ markField('email',true); showErr('emailErr',true); valid=false; }
+  else{ markField('email',false); showErr('emailErr',false); }
+  if(!ph){ markField('phone',true); showErr('phoneErr',true); valid=false; }
+  else{ markField('phone',false); showErr('phoneErr',false); }
+  if(!st){ markField('state',true); showErr('stateErr',true); valid=false; }
+  else{ markField('state',false); showErr('stateErr',false); }
+  if(accreds.length===0){ showErr('accredErr',true); valid=false; }
+  else{ showErr('accredErr',false); }
+  if(!valid) return;
+  formData.firstName=fn; formData.lastName=ln; formData.name=fn+' '+ln;
+  formData.email=em; formData.phone=ph; formData.state=st;
+  formData.accreditation=accreds.map(a=>a.value).join(', ');
+  document.getElementById('page1').classList.add('hidden');
+  document.getElementById('page2').classList.remove('hidden');
+  setStepTabs(2); setBar(50); window.scrollTo(0,0);
+}
+
+function goStep1(){
+  document.getElementById('page2').classList.add('hidden');
+  document.getElementById('page1').classList.remove('hidden');
+  setStepTabs(1); setBar(0); window.scrollTo(0,0);
+}
+
+function goStep3(){
+  let valid = true;
+  const proj = document.querySelector('input[name="project"]:checked');
+  const amt = document.getElementById('amount').value.trim();
+  const ent = document.getElementById('entityType').value;
+  if(!proj){ showErr('projErr',true); valid=false; }
+  else{ showErr('projErr',false); }
+  if(!amt){ markField('amount',true); showErr('amountErr',true); valid=false; }
+  else{ markField('amount',false); showErr('amountErr',false); }
+  if(!ent){ markField('entityType',true); showErr('entityErr',true); valid=false; }
+  else{ markField('entityType',false); showErr('entityErr',false); }
+  if(!valid) return;
+  formData.project=proj.value; formData.amount=amt;
+  formData.entityType=ent; formData.source=selectedSource||'Not specified';
+  const rows=[
+    ['Investor Name',formData.name],['Email',formData.email],['Phone',formData.phone],
+    ['State',formData.state],['Accreditation Basis',formData.accreditation],
+    ['Project',formData.project],['Investment Amount',formData.amount],
+    ['Investing As',formData.entityType],['Source',formData.source],
+  ];
+  document.getElementById('summaryContent').innerHTML=rows.map(([l,v])=>`
+    <div class="summary-row"><span class="summary-label">${l}</span><span class="summary-value">${v}</span></div>
+  `).join('');
+  document.getElementById('page2').classList.add('hidden');
+  document.getElementById('page3').classList.remove('hidden');
+  setStepTabs(3); setBar(85); window.scrollTo(0,0);
+}
+
+function goStep2Back(){
+  document.getElementById('page3').classList.add('hidden');
+  document.getElementById('page2').classList.remove('hidden');
+  setStepTabs(2); setBar(50); window.scrollTo(0,0);
+}
+
+function toggleConfirmBtn(){
+  document.getElementById('submitBtn').disabled=!document.getElementById('confirmCheck').checked;
+}
+
+async function submitForm(){
+  const btn = document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  const payload={
+    docType:'investor_onboarding',
+    ...formData,
+    submittedAt:new Date().toISOString(),
+    prompt:`New investor onboarding submission for Galbreath Capital:\n\nInvestor: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nState: ${formData.state}\nAccreditation: ${formData.accreditation}\nProject Interest: ${formData.project}\nInvestment Amount: ${formData.amount}\nEntity Type: ${formData.entityType}\nSource: ${formData.source}\n\nPlease send a confirmation email to ${formData.email} welcoming them and letting them know Joshua Galbreath will be in touch within 1-2 business days. Sign the email as Joshua Galbreath, Principal, Galbreath Capital LLC.`
+  };
+  try{
+    await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(e){}
+  document.getElementById('page3').classList.add('hidden');
+  document.getElementById('successPage').style.display='block';
+  document.getElementById('refName').textContent=formData.name+' — '+formData.project.split('—')[0].trim();
+  setBar(100); setStepTabs(4); window.scrollTo(0,0);
 }
 </script>
 </body>
