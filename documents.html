@@ -87,34 +87,19 @@
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <div class="hdr-brand">Galbreath Capital</div>
   <a href="index.html" class="hdr-link">AI Document Generator</a>
 </div>
-
 <div class="gold-bar" id="goldBar"></div>
-
 <div class="progress">
   <div class="steps">
-    <div class="step active" id="step1tab">
-      <div class="step-num">1</div>
-      <div class="step-label">Profile</div>
-    </div>
-    <div class="step" id="step2tab">
-      <div class="step-num">2</div>
-      <div class="step-label">Investment</div>
-    </div>
-    <div class="step" id="step3tab">
-      <div class="step-num">3</div>
-      <div class="step-label">Confirm</div>
-    </div>
+    <div class="step active" id="step1tab"><div class="step-num">1</div><div class="step-label">Profile</div></div>
+    <div class="step" id="step2tab"><div class="step-num">2</div><div class="step-label">Investment</div></div>
+    <div class="step" id="step3tab"><div class="step-num">3</div><div class="step-label">Confirm</div></div>
   </div>
 </div>
-
 <div class="main">
-
-  <!-- STEP 1 -->
   <div id="page1">
     <div class="live-badge"><span class="live-dot"></span>Live &nbsp;·&nbsp; Submissions sent directly to Galbreath Capital</div>
     <div class="section-title">Your investor profile</div>
@@ -122,28 +107,11 @@
     <div class="card">
       <div class="card-title">Contact Information</div>
       <div class="grid">
-        <div class="field">
-          <label>First Name</label>
-          <input id="firstName" type="text" placeholder="First name">
-          <span class="err-msg" id="firstNameErr">Required</span>
-        </div>
-        <div class="field">
-          <label>Last Name</label>
-          <input id="lastName" type="text" placeholder="Last name">
-          <span class="err-msg" id="lastNameErr">Required</span>
-        </div>
-        <div class="field full">
-          <label>Email Address</label>
-          <input id="email" type="email" placeholder="you@email.com">
-          <span class="err-msg" id="emailErr">Valid email required</span>
-        </div>
-        <div class="field">
-          <label>Phone Number</label>
-          <input id="phone" type="tel" placeholder="(214) 555-0100">
-          <span class="err-msg" id="phoneErr">Required</span>
-        </div>
-        <div class="field">
-          <label>State of Residence</label>
+        <div class="field"><label>First Name</label><input id="firstName" type="text" placeholder="First name"><span class="err-msg" id="firstNameErr">Required</span></div>
+        <div class="field"><label>Last Name</label><input id="lastName" type="text" placeholder="Last name"><span class="err-msg" id="lastNameErr">Required</span></div>
+        <div class="field full"><label>Email Address</label><input id="email" type="email" placeholder="you@email.com"><span class="err-msg" id="emailErr">Valid email required</span></div>
+        <div class="field"><label>Phone Number</label><input id="phone" type="tel" placeholder="(214) 555-0100"><span class="err-msg" id="phoneErr">Required</span></div>
+        <div class="field"><label>State of Residence</label>
           <select id="state">
             <option value="">Select state...</option>
             <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option><option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option><option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option><option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option><option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option><option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option><option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option><option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option><option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option><option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option><option>South Dakota</option><option>Tennessee</option><option selected>Texas</option><option>Utah</option><option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option><option>Wisconsin</option><option>Wyoming</option>
@@ -155,112 +123,43 @@
     <div class="card">
       <div class="card-title">Accreditation Basis</div>
       <div class="check-group" id="accredGroup">
-        <label class="check-item" id="acc1">
-          <input type="checkbox" value="income" onchange="toggleCheck(this,'acc1')">
-          <div>
-            <div class="check-item-text">Income — $200K+ individual / $300K+ joint (last 2 years)</div>
-            <div class="check-item-sub">With reasonable expectation of same this year</div>
-          </div>
-        </label>
-        <label class="check-item" id="acc2">
-          <input type="checkbox" value="networth" onchange="toggleCheck(this,'acc2')">
-          <div>
-            <div class="check-item-text">Net worth — $1M+ excluding primary residence</div>
-            <div class="check-item-sub">Individual or joint with spouse</div>
-          </div>
-        </label>
-        <label class="check-item" id="acc3">
-          <input type="checkbox" value="entity" onchange="toggleCheck(this,'acc3')">
-          <div>
-            <div class="check-item-text">Entity — $5M+ in assets or all accredited members</div>
-            <div class="check-item-sub">Trust, LLC, corporation, or partnership</div>
-          </div>
-        </label>
+        <label class="check-item" id="acc1"><input type="checkbox" value="income" onchange="toggleCheck(this,'acc1')"><div><div class="check-item-text">Income — $200K+ individual / $300K+ joint (last 2 years)</div><div class="check-item-sub">With reasonable expectation of same this year</div></div></label>
+        <label class="check-item" id="acc2"><input type="checkbox" value="networth" onchange="toggleCheck(this,'acc2')"><div><div class="check-item-text">Net worth — $1M+ excluding primary residence</div><div class="check-item-sub">Individual or joint with spouse</div></div></label>
+        <label class="check-item" id="acc3"><input type="checkbox" value="entity" onchange="toggleCheck(this,'acc3')"><div><div class="check-item-text">Entity — $5M+ in assets or all accredited members</div><div class="check-item-sub">Trust, LLC, corporation, or partnership</div></div></label>
       </div>
       <span class="err-msg" id="accredErr" style="margin-top:10px">Please select at least one accreditation basis</span>
     </div>
-    <div class="btn-row">
-      <button class="btn-primary" onclick="goStep2()">Continue →</button>
-    </div>
+    <div class="btn-row"><button class="btn-primary" onclick="goStep2()">Continue →</button></div>
   </div>
 
-  <!-- STEP 2 -->
   <div id="page2" class="hidden">
     <div class="section-title">Investment details</div>
     <div class="section-sub">Select your project of interest, investment amount, and entity type.</div>
     <div class="card">
       <div class="card-title">Project Selection</div>
       <div class="check-group">
-        <label class="check-item" id="proj1">
-          <input type="radio" name="project" value="Parker Henderson — 46-Unit Duplex, Fort Worth" onchange="selectProject('proj1')">
-          <div>
-            <div class="check-item-text">Parker Henderson — 46-Unit Duplex</div>
-            <div class="check-item-sub">Fort Worth, TX &nbsp;·&nbsp; Target raise: $3.2M &nbsp;·&nbsp; 30% ROI</div>
-          </div>
-        </label>
-        <label class="check-item" id="proj2">
-          <input type="radio" name="project" value="Mayfair Street — 63-Lot SF, Ennis" onchange="selectProject('proj2')">
-          <div>
-            <div class="check-item-text">Mayfair Street — 63-Lot Hybrid Community</div>
-            <div class="check-item-sub">Ennis, TX &nbsp;·&nbsp; Healthcare/Housing &nbsp;·&nbsp; 30% ROI</div>
-          </div>
-        </label>
-        <label class="check-item" id="proj3">
-          <input type="radio" name="project" value="Norman Avenue — 16-Unit Fourplex, Fort Worth" onchange="selectProject('proj3')">
-          <div>
-            <div class="check-item-text">Norman Avenue — 16-Unit Fourplex</div>
-            <div class="check-item-sub">Fort Worth, TX &nbsp;·&nbsp; Target raise: $1.8M &nbsp;·&nbsp; 30% ROI</div>
-          </div>
-        </label>
-        <label class="check-item" id="proj4">
-          <input type="radio" name="project" value="Sanford Road Townhomes — 11-Unit, Arlington" onchange="selectProject('proj4')">
-          <div>
-            <div class="check-item-text">Sanford Road Townhomes — 11-Unit</div>
-            <div class="check-item-sub">Arlington, TX &nbsp;·&nbsp; Target raise: $1.4M &nbsp;·&nbsp; 30% ROI</div>
-          </div>
-        </label>
-        <label class="check-item" id="proj5">
-          <input type="radio" name="project" value="5701 Calhoun Road — 8-Unit Luxury Mid-Rise, Houston" onchange="selectProject('proj5')">
-          <div>
-            <div class="check-item-text">5701 Calhoun Road — 8-Unit Luxury Mid-Rise</div>
-            <div class="check-item-sub">Houston, TX &nbsp;·&nbsp; Target raise: $2.1M &nbsp;·&nbsp; 30% ROI</div>
-          </div>
-        </label>
-        <label class="check-item" id="proj6">
-          <input type="radio" name="project" value="Galbreath Capital Portfolio Fund (All Projects)" onchange="selectProject('proj6')">
-          <div>
-            <div class="check-item-text">Portfolio Fund — All Projects</div>
-            <div class="check-item-sub">Diversified across all 5 Texas projects &nbsp;·&nbsp; $17.21M total raise</div>
-          </div>
-        </label>
+        <label class="check-item" id="proj1"><input type="radio" name="project" value="Parker Henderson — 46-Unit Duplex, Fort Worth" onchange="selectProject('proj1')"><div><div class="check-item-text">Parker Henderson — 46-Unit Duplex</div><div class="check-item-sub">Fort Worth, TX &nbsp;·&nbsp; Target raise: $3.2M &nbsp;·&nbsp; 30% ROI</div></div></label>
+        <label class="check-item" id="proj2"><input type="radio" name="project" value="Mayfair Street — 63-Lot SF, Ennis" onchange="selectProject('proj2')"><div><div class="check-item-text">Mayfair Street — 63-Lot Hybrid Community</div><div class="check-item-sub">Ennis, TX &nbsp;·&nbsp; Healthcare/Housing &nbsp;·&nbsp; 30% ROI</div></div></label>
+        <label class="check-item" id="proj3"><input type="radio" name="project" value="Norman Avenue — 16-Unit Fourplex, Fort Worth" onchange="selectProject('proj3')"><div><div class="check-item-text">Norman Avenue — 16-Unit Fourplex</div><div class="check-item-sub">Fort Worth, TX &nbsp;·&nbsp; Target raise: $1.8M &nbsp;·&nbsp; 30% ROI</div></div></label>
+        <label class="check-item" id="proj4"><input type="radio" name="project" value="Sanford Road Townhomes — 11-Unit, Arlington" onchange="selectProject('proj4')"><div><div class="check-item-text">Sanford Road Townhomes — 11-Unit</div><div class="check-item-sub">Arlington, TX &nbsp;·&nbsp; Target raise: $1.4M &nbsp;·&nbsp; 30% ROI</div></div></label>
+        <label class="check-item" id="proj5"><input type="radio" name="project" value="5701 Calhoun Road — 8-Unit Luxury Mid-Rise, Houston" onchange="selectProject('proj5')"><div><div class="check-item-text">5701 Calhoun Road — 8-Unit Luxury Mid-Rise</div><div class="check-item-sub">Houston, TX &nbsp;·&nbsp; Target raise: $2.1M &nbsp;·&nbsp; 30% ROI</div></div></label>
+        <label class="check-item" id="proj6"><input type="radio" name="project" value="Galbreath Capital Portfolio Fund (All Projects)" onchange="selectProject('proj6')"><div><div class="check-item-text">Portfolio Fund — All Projects</div><div class="check-item-sub">Diversified across all 5 Texas projects &nbsp;·&nbsp; $17.21M total raise</div></div></label>
       </div>
       <span class="err-msg" id="projErr" style="margin-top:10px">Please select a project</span>
     </div>
     <div class="card">
       <div class="card-title">Investment Details</div>
       <div class="grid">
-        <div class="field">
-          <label>Investment Amount</label>
-          <input id="amount" type="text" placeholder="e.g. $250,000">
-          <span class="err-msg" id="amountErr">Required</span>
-        </div>
-        <div class="field">
-          <label>Investing As</label>
+        <div class="field"><label>Investment Amount</label><input id="amount" type="text" placeholder="e.g. $250,000"><span class="err-msg" id="amountErr">Required</span></div>
+        <div class="field"><label>Investing As</label>
           <select id="entityType">
             <option value="">Select...</option>
-            <option>Individual</option>
-            <option>Joint (with spouse)</option>
-            <option>LLC</option>
-            <option>Trust</option>
-            <option>Corporation</option>
-            <option>Self-Directed IRA</option>
-            <option>Partnership</option>
+            <option>Individual</option><option>Joint (with spouse)</option><option>LLC</option><option>Trust</option><option>Corporation</option><option>Self-Directed IRA</option><option>Partnership</option>
           </select>
           <span class="err-msg" id="entityErr">Required</span>
         </div>
-        <div class="field full">
-          <label>How did you hear about us?</label>
-          <div class="radio-group" id="sourceGroup">
+        <div class="field full"><label>How did you hear about us?</label>
+          <div class="radio-group">
             <div class="radio-pill" onclick="selectSource(this,'Referral')">Referral</div>
             <div class="radio-pill" onclick="selectSource(this,'LinkedIn')">LinkedIn</div>
             <div class="radio-pill" onclick="selectSource(this,'Email')">Email</div>
@@ -271,178 +170,113 @@
         </div>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="goStep1()">← Back</button>
-      <button class="btn-primary" onclick="goStep3()">Review & Confirm →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="goStep1()">← Back</button><button class="btn-primary" onclick="goStep3()">Review & Confirm →</button></div>
   </div>
 
-  <!-- STEP 3 -->
   <div id="page3" class="hidden">
     <div class="section-title">Review & confirm</div>
     <div class="section-sub">Please review your information before submitting to Galbreath Capital.</div>
-    <div class="card">
-      <div class="card-title">Your Submission</div>
-      <div id="summaryContent"></div>
-    </div>
-    <div class="disclosure">
-      <strong style="display:block;margin-bottom:6px;color:var(--text)">Reg D 506(c) — Accredited Investors Only</strong>
-      This offering is made pursuant to Rule 506(c) of Regulation D under the Securities Act of 1933. This is not an offer to sell securities. Securities may only be offered and sold to accredited investors. Past performance is not indicative of future results. All investments carry risk including the possible loss of principal.
-    </div>
-    <div class="confirm-check">
-      <input type="checkbox" id="confirmCheck" onchange="toggleConfirmBtn()">
-      <label for="confirmCheck">I confirm that I am an accredited investor as defined under SEC Rule 501 and that the information I have provided is accurate and complete.</label>
-    </div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="goStep2Back()">← Back</button>
-      <button class="btn-primary" id="submitBtn" onclick="submitForm()" disabled>Submit to Galbreath Capital</button>
-    </div>
+    <div class="card"><div class="card-title">Your Submission</div><div id="summaryContent"></div></div>
+    <div class="disclosure"><strong style="display:block;margin-bottom:6px;color:var(--text)">Reg D 506(c) — Accredited Investors Only</strong>This offering is made pursuant to Rule 506(c) of Regulation D under the Securities Act of 1933. This is not an offer to sell securities. Securities may only be offered and sold to accredited investors. Past performance is not indicative of future results. All investments carry risk including the possible loss of principal.</div>
+    <div class="confirm-check"><input type="checkbox" id="confirmCheck" onchange="toggleConfirmBtn()"><label for="confirmCheck">I confirm that I am an accredited investor as defined under SEC Rule 501 and that the information I have provided is accurate and complete.</label></div>
+    <div class="btn-row"><button class="btn-back" onclick="goStep2Back()">← Back</button><button class="btn-primary" id="submitBtn" onclick="submitForm()" disabled>Submit to Galbreath Capital</button></div>
   </div>
 
-  <!-- SUCCESS -->
   <div class="success" id="successPage">
     <div class="success-icon">✓</div>
     <div class="success-title">Submission Received</div>
     <div class="success-sub">Thank you for your interest in Galbreath Capital. Joshua Galbreath will review your submission and be in touch within 1–2 business days to discuss next steps.</div>
-    <div class="success-ref">
-      <strong id="refName"></strong>
-      Your submission has been sent to Joshua@galbreathcapital.com
-    </div>
+    <div class="success-ref"><strong id="refName"></strong>Your submission has been sent to Joshua@galbreathcapital.com</div>
   </div>
-
 </div>
 
 <script>
-const WEBHOOK = 'https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-document-generator';
+const WEBHOOK = 'https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-investor-onboarding';
 let formData = {};
 let selectedSource = '';
 
-function setBar(pct){ document.getElementById('goldBar').style.width = pct+'%'; }
-
+function setBar(pct){ document.getElementById('goldBar').style.width=pct+'%'; }
 function setStepTabs(active){
   [1,2,3].forEach(i=>{
-    const t = document.getElementById('step'+i+'tab');
+    const t=document.getElementById('step'+i+'tab');
     t.classList.remove('active','done');
-    if(i < active) t.classList.add('done');
-    if(i === active) t.classList.add('active');
+    if(i<active) t.classList.add('done');
+    if(i===active) t.classList.add('active');
   });
 }
-
-function toggleCheck(cb,id){
-  document.getElementById(id).classList.toggle('selected',cb.checked);
-}
-
+function toggleCheck(cb,id){ document.getElementById(id).classList.toggle('selected',cb.checked); }
 function selectProject(id){
-  ['proj1','proj2','proj3','proj4','proj5','proj6'].forEach(p=>{
-    document.getElementById(p).classList.remove('selected');
-  });
+  ['proj1','proj2','proj3','proj4','proj5','proj6'].forEach(p=>document.getElementById(p).classList.remove('selected'));
   document.getElementById(id).classList.add('selected');
 }
-
 function selectSource(el,val){
   document.querySelectorAll('.radio-pill').forEach(p=>p.classList.remove('selected'));
   el.classList.add('selected');
-  selectedSource = val;
+  selectedSource=val;
 }
-
-function showErr(id,show){
-  const el = document.getElementById(id);
-  if(el){ el.classList.toggle('show',show); }
-}
-function markField(id,error){
-  const el = document.getElementById(id);
-  if(el){ el.classList.toggle('error',error); }
-}
+function showErr(id,show){ const el=document.getElementById(id); if(el) el.classList.toggle('show',show); }
+function markField(id,error){ const el=document.getElementById(id); if(el) el.classList.toggle('error',error); }
 
 function goStep2(){
-  let valid = true;
-  const fn = document.getElementById('firstName').value.trim();
-  const ln = document.getElementById('lastName').value.trim();
-  const em = document.getElementById('email').value.trim();
-  const ph = document.getElementById('phone').value.trim();
-  const st = document.getElementById('state').value;
-  const accreds = [...document.querySelectorAll('#accredGroup input:checked')];
-  if(!fn){ markField('firstName',true); showErr('firstNameErr',true); valid=false; }
-  else{ markField('firstName',false); showErr('firstNameErr',false); }
-  if(!ln){ markField('lastName',true); showErr('lastNameErr',true); valid=false; }
-  else{ markField('lastName',false); showErr('lastNameErr',false); }
-  if(!em||!em.includes('@')){ markField('email',true); showErr('emailErr',true); valid=false; }
-  else{ markField('email',false); showErr('emailErr',false); }
-  if(!ph){ markField('phone',true); showErr('phoneErr',true); valid=false; }
-  else{ markField('phone',false); showErr('phoneErr',false); }
-  if(!st){ markField('state',true); showErr('stateErr',true); valid=false; }
-  else{ markField('state',false); showErr('stateErr',false); }
-  if(accreds.length===0){ showErr('accredErr',true); valid=false; }
-  else{ showErr('accredErr',false); }
+  let valid=true;
+  const fn=document.getElementById('firstName').value.trim();
+  const ln=document.getElementById('lastName').value.trim();
+  const em=document.getElementById('email').value.trim();
+  const ph=document.getElementById('phone').value.trim();
+  const st=document.getElementById('state').value;
+  const accreds=[...document.querySelectorAll('#accredGroup input:checked')];
+  if(!fn){markField('firstName',true);showErr('firstNameErr',true);valid=false;}else{markField('firstName',false);showErr('firstNameErr',false);}
+  if(!ln){markField('lastName',true);showErr('lastNameErr',true);valid=false;}else{markField('lastName',false);showErr('lastNameErr',false);}
+  if(!em||!em.includes('@')){markField('email',true);showErr('emailErr',true);valid=false;}else{markField('email',false);showErr('emailErr',false);}
+  if(!ph){markField('phone',true);showErr('phoneErr',true);valid=false;}else{markField('phone',false);showErr('phoneErr',false);}
+  if(!st){markField('state',true);showErr('stateErr',true);valid=false;}else{markField('state',false);showErr('stateErr',false);}
+  if(accreds.length===0){showErr('accredErr',true);valid=false;}else{showErr('accredErr',false);}
   if(!valid) return;
-  formData.firstName=fn; formData.lastName=ln; formData.name=fn+' '+ln;
-  formData.email=em; formData.phone=ph; formData.state=st;
+  formData.firstName=fn;formData.lastName=ln;formData.name=fn+' '+ln;
+  formData.email=em;formData.phone=ph;formData.state=st;
   formData.accreditation=accreds.map(a=>a.value).join(', ');
   document.getElementById('page1').classList.add('hidden');
   document.getElementById('page2').classList.remove('hidden');
-  setStepTabs(2); setBar(50); window.scrollTo(0,0);
+  setStepTabs(2);setBar(50);window.scrollTo(0,0);
 }
-
 function goStep1(){
   document.getElementById('page2').classList.add('hidden');
   document.getElementById('page1').classList.remove('hidden');
-  setStepTabs(1); setBar(0); window.scrollTo(0,0);
+  setStepTabs(1);setBar(0);window.scrollTo(0,0);
 }
-
 function goStep3(){
-  let valid = true;
-  const proj = document.querySelector('input[name="project"]:checked');
-  const amt = document.getElementById('amount').value.trim();
-  const ent = document.getElementById('entityType').value;
-  if(!proj){ showErr('projErr',true); valid=false; }
-  else{ showErr('projErr',false); }
-  if(!amt){ markField('amount',true); showErr('amountErr',true); valid=false; }
-  else{ markField('amount',false); showErr('amountErr',false); }
-  if(!ent){ markField('entityType',true); showErr('entityErr',true); valid=false; }
-  else{ markField('entityType',false); showErr('entityErr',false); }
+  let valid=true;
+  const proj=document.querySelector('input[name="project"]:checked');
+  const amt=document.getElementById('amount').value.trim();
+  const ent=document.getElementById('entityType').value;
+  if(!proj){showErr('projErr',true);valid=false;}else{showErr('projErr',false);}
+  if(!amt){markField('amount',true);showErr('amountErr',true);valid=false;}else{markField('amount',false);showErr('amountErr',false);}
+  if(!ent){markField('entityType',true);showErr('entityErr',true);valid=false;}else{markField('entityType',false);showErr('entityErr',false);}
   if(!valid) return;
-  formData.project=proj.value; formData.amount=amt;
-  formData.entityType=ent; formData.source=selectedSource||'Not specified';
-  const rows=[
-    ['Investor Name',formData.name],['Email',formData.email],['Phone',formData.phone],
-    ['State',formData.state],['Accreditation Basis',formData.accreditation],
-    ['Project',formData.project],['Investment Amount',formData.amount],
-    ['Investing As',formData.entityType],['Source',formData.source],
-  ];
-  document.getElementById('summaryContent').innerHTML=rows.map(([l,v])=>`
-    <div class="summary-row"><span class="summary-label">${l}</span><span class="summary-value">${v}</span></div>
-  `).join('');
+  formData.project=proj.value;formData.amount=amt;formData.entityType=ent;formData.source=selectedSource||'Not specified';
+  const rows=[['Investor Name',formData.name],['Email',formData.email],['Phone',formData.phone],['State',formData.state],['Accreditation Basis',formData.accreditation],['Project',formData.project],['Investment Amount',formData.amount],['Investing As',formData.entityType],['Source',formData.source]];
+  document.getElementById('summaryContent').innerHTML=rows.map(([l,v])=>`<div class="summary-row"><span class="summary-label">${l}</span><span class="summary-value">${v}</span></div>`).join('');
   document.getElementById('page2').classList.add('hidden');
   document.getElementById('page3').classList.remove('hidden');
-  setStepTabs(3); setBar(85); window.scrollTo(0,0);
+  setStepTabs(3);setBar(85);window.scrollTo(0,0);
 }
-
 function goStep2Back(){
   document.getElementById('page3').classList.add('hidden');
   document.getElementById('page2').classList.remove('hidden');
-  setStepTabs(2); setBar(50); window.scrollTo(0,0);
+  setStepTabs(2);setBar(50);window.scrollTo(0,0);
 }
-
-function toggleConfirmBtn(){
-  document.getElementById('submitBtn').disabled=!document.getElementById('confirmCheck').checked;
-}
-
+function toggleConfirmBtn(){ document.getElementById('submitBtn').disabled=!document.getElementById('confirmCheck').checked; }
 async function submitForm(){
-  const btn = document.getElementById('submitBtn');
-  btn.disabled=true; btn.textContent='Submitting...';
-  const payload={
-    docType:'investor_onboarding',
-    ...formData,
-    submittedAt:new Date().toISOString(),
-    prompt:`New investor onboarding submission for Galbreath Capital:\n\nInvestor: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nState: ${formData.state}\nAccreditation: ${formData.accreditation}\nProject Interest: ${formData.project}\nInvestment Amount: ${formData.amount}\nEntity Type: ${formData.entityType}\nSource: ${formData.source}\n\nPlease send a confirmation email to ${formData.email} welcoming them and letting them know Joshua Galbreath will be in touch within 1-2 business days. Sign the email as Joshua Galbreath, Principal, Galbreath Capital LLC.`
-  };
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Submitting...';
+  const payload={docType:'investor_onboarding',...formData,submittedAt:new Date().toISOString()};
   try{
     await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   }catch(e){}
   document.getElementById('page3').classList.add('hidden');
   document.getElementById('successPage').style.display='block';
   document.getElementById('refName').textContent=formData.name+' — '+formData.project.split('—')[0].trim();
-  setBar(100); setStepTabs(4); window.scrollTo(0,0);
+  setBar(100);setStepTabs(4);window.scrollTo(0,0);
 }
 </script>
 </body>
