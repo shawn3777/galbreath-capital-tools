@@ -8,7 +8,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0f1e35;--navy2:#162844;--navy3:#1e3560;
+  --navy:#0f1e35;--navy2:#162844;
   --gold:#c9a84c;--gold2:#e8c97a;
   --text:#e8e0d0;--muted:#7a8faa;--border:rgba(201,168,76,.18);
   --green:#4caf82;--blue:#4a8fc9;
@@ -27,9 +27,11 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
 .field input{width:100%;padding:12px 16px;background:rgba(15,30,53,.6);border:1px solid rgba(201,168,76,.2);border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .2s}
 .field input:focus{border-color:var(--gold)}
 .field input::placeholder{color:rgba(122,143,170,.5)}
-.login-btn{width:100%;padding:14px;margin-top:8px;background:linear-gradient(135deg,var(--gold),#a8832a);color:var(--navy);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .2s}
+.login-btn{width:100%;padding:14px;margin-top:8px;background:linear-gradient(135deg,var(--gold),#a8832a);color:var(--navy);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:8px}
 .login-btn:hover{opacity:.88}
-.login-error{color:#e05c3a;font-size:12px;text-align:center;margin-top:12px;display:none}
+.login-btn:disabled{opacity:.6;cursor:not-allowed}
+.login-spinner{width:14px;height:14px;border:2px solid rgba(15,30,53,.4);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;display:none}
+.login-error{color:#e05c3a;font-size:12px;text-align:center;margin-top:12px;display:none;line-height:1.5}
 .login-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.7}
 .login-hint span{color:var(--gold)}
 #portal{display:none;min-height:100vh}
@@ -60,12 +62,6 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
 .card{background:rgba(22,40,68,.6);border:1px solid var(--border);border-radius:4px;padding:28px}
 .card-title{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:20px;display:flex;align-items:center;gap:8px}
 .card-title::after{content:'';flex:1;height:1px;background:var(--border)}
-.project-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(201,168,76,.08)}
-.project-item:last-child{border-bottom:none}
-.proj-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.proj-name{font-size:13px;color:#fff;font-weight:500}
-.proj-type{font-size:11px;color:var(--muted);margin-top:2px}
-.proj-amount{font-family:'DM Mono',monospace;font-size:13px;color:var(--gold);text-align:right}
 .payout-box{margin-top:16px;padding:14px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.1);border-radius:3px}
 .payout-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text);margin-bottom:6px}
 .payout-row span:last-child{font-family:'DM Mono',monospace;color:#fff}
@@ -81,7 +77,6 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
 .doc-badge{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:20px;font-family:'DM Mono',monospace}
 .badge-complete{background:rgba(76,175,130,.15);color:var(--green);border:1px solid rgba(76,175,130,.25)}
 .badge-pending{background:rgba(224,148,58,.12);color:#e0943a;border:1px solid rgba(224,148,58,.25)}
-.badge-awaiting{background:rgba(74,143,201,.12);color:var(--blue);border:1px solid rgba(74,143,201,.25)}
 .raise-card{background:rgba(22,40,68,.6);border:1px solid var(--border);border-radius:4px;padding:28px;margin-bottom:20px}
 .raise-numbers{display:flex;align-items:baseline;gap:12px;margin-bottom:20px}
 .raise-closed{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:var(--gold)}
@@ -111,8 +106,12 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
 .mgmt-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6220);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--navy);flex-shrink:0}
 .mgmt-name{font-size:14px;font-weight:500;color:#fff}
 .mgmt-title{font-size:11px;color:var(--muted);margin-top:2px}
+.live-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);font-family:'DM Mono',monospace;background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.2);padding:3px 10px;border-radius:20px;margin-left:10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 .portal-footer{border-top:1px solid var(--border);padding:24px 40px;text-align:center;font-size:10px;color:var(--muted);letter-spacing:.08em;line-height:1.8}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .fade-up{animation:fadeUp .5s ease both}
 .fade-up-2{animation:fadeUp .5s .1s ease both}
 .fade-up-3{animation:fadeUp .5s .2s ease both}
@@ -138,15 +137,18 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
       <label>Investor ID</label>
       <input type="text" id="loginId" placeholder="INV-001">
     </div>
-    <button class="login-btn" onclick="doLogin()">Access My Portfolio →</button>
-    <div class="login-error" id="loginError">Invalid credentials. Please check your Investor ID and email.</div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">
+      <div class="login-spinner" id="loginSpinner"></div>
+      <span id="loginBtnText">Access My Portfolio →</span>
+    </button>
+    <div class="login-error" id="loginError"></div>
     <div class="login-hint">Your Investor ID was provided in your welcome email.<br>Questions? Contact <span>Joshua@galbreathcapital.com</span></div>
   </div>
 </div>
 
 <div id="portal">
   <div class="hdr">
-    <div class="hdr-logo">Galbreath Capital, LLC</div>
+    <div class="hdr-logo">Galbreath Capital, LLC <span class="live-badge"><span class="live-dot"></span>Live Data</span></div>
     <div class="hdr-right">
       <div class="hdr-investor">Welcome back, <span id="hdrName"></span></div>
       <div class="hdr-id" id="hdrId"></div>
@@ -214,7 +216,7 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
         <div class="card-title">Investment Timeline</div>
         <ul class="timeline">
           <li class="tl-item"><div class="tl-dot done">✓</div><div><div class="tl-label">Subscription Executed</div><div class="tl-date" id="tlDate1"></div><div class="tl-note">Subscription agreement and W-9 on file.</div></div></li>
-          <li class="tl-item"><div class="tl-dot done">✓</div><div><div class="tl-label">Wire Received</div><div class="tl-date" id="tlDate2"></div><div class="tl-note">Capital contribution confirmed and logged.</div></div></li>
+          <li class="tl-item"><div class="tl-dot done">✓</div><div><div class="tl-label">Capital Received</div><div class="tl-date" id="tlDate2"></div><div class="tl-note">Capital contribution confirmed and logged.</div></div></li>
           <li class="tl-item"><div class="tl-dot active">◆</div><div><div class="tl-label">Active Development Phase</div><div class="tl-date">Now → Est. Q4 2026</div><div class="tl-note">Construction and entitlement work underway across portfolio.</div></div></li>
           <li class="tl-item"><div class="tl-dot future">○</div><div><div class="tl-label">Distribution — Phase 1</div><div class="tl-date">Est. Month 6</div><div class="tl-note">Initial return of principal + partial ROI.</div></div></li>
           <li class="tl-item"><div class="tl-dot future">○</div><div><div class="tl-label">Full Payout</div><div class="tl-date">Est. Month 18–20</div><div class="tl-note">Principal + 30% ROI returned in full.</div></div></li>
@@ -241,103 +243,117 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
 </div>
 
 <script>
-var INVESTORS = {
-  "steve.gordon@harrisonstreet.com::INV-001": {
-    id:"INV-001",firstName:"Steve",fullName:"Steve Gordon",
-    capital:250000,project:"Parker Henderson — 46-Unit Duplex, Fort Worth",
-    projColor:"#c9a84c",projType:"Residential Duplex · Fort Worth",
-    investDate:"March 30, 2026",wireDate:"April 2, 2026",
-    docs:[
-      {name:"Subscription Agreement",date:"Mar 30, 2026",status:"complete",icon:"📄"},
-      {name:"Form W-9",date:"Mar 30, 2026",status:"complete",icon:"📋"},
-      {name:"Promissory Note",date:"Apr 1, 2026",status:"complete",icon:"📝"},
-      {name:"Wire Confirmation",date:"Apr 2, 2026",status:"complete",icon:"🏦"}
-    ]
-  },
-  "demo@galbreathcapital.com::INV-002": {
-    id:"INV-002",firstName:"Michael",fullName:"Michael Thompson",
-    capital:100000,project:"Norman Avenue — 16-Unit Fourplex, Fort Worth",
-    projColor:"#4a8fc9",projType:"Multifamily · Fort Worth",
-    investDate:"April 10, 2026",wireDate:"April 12, 2026",
-    docs:[
-      {name:"Subscription Agreement",date:"Apr 10, 2026",status:"complete",icon:"📄"},
-      {name:"Form W-9",date:"Apr 10, 2026",status:"complete",icon:"📋"},
-      {name:"Promissory Note",date:"Apr 11, 2026",status:"complete",icon:"📝"},
-      {name:"Wire Confirmation",date:"Apr 12, 2026",status:"complete",icon:"🏦"}
-    ]
-  },
-  "investor@test.com::INV-003": {
-    id:"INV-003",firstName:"Patricia",fullName:"Patricia Williams",
-    capital:50000,project:"Sanford Road Townhomes — 11-Unit, Arlington",
-    projColor:"#4caf82",projType:"Townhomes · Arlington",
-    investDate:"May 1, 2026",wireDate:"Pending",
-    docs:[
-      {name:"Subscription Agreement",date:"May 1, 2026",status:"complete",icon:"📄"},
-      {name:"Form W-9",date:"—",status:"pending",icon:"📋"},
-      {name:"Promissory Note",date:"—",status:"awaiting",icon:"📝"},
-      {name:"Wire Confirmation",date:"—",status:"awaiting",icon:"🏦"}
-    ]
-  }
-};
+var WEBHOOK = 'https://script.google.com/macros/s/AKfycbz3T8kF_pdadhsJx0YaPTYdz76wz39BSQgjswgxjuSw-u-qFZHGjoGYNF53Xk8g27-phQ/exec';
 
-function doLogin() {
-  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
-  var id = document.getElementById('loginId').value.trim().toUpperCase();
-  var key = email + '::' + id;
-  var inv = INVESTORS[key];
-  if (!inv) { document.getElementById('loginError').style.display='block'; return; }
-  document.getElementById('loginError').style.display='none';
-  loadPortal(inv);
+function fmt(n) {
+  var num = parseFloat(String(n).replace(/[^0-9.]/g,'')) || 0;
+  return '$' + num.toLocaleString();
 }
 
+function docStatus(val) {
+  if (!val || val === '' || val === 'No') return 'pending';
+  return 'complete';
+}
+
+function docBadge(status) {
+  return status === 'complete'
+    ? '<div class="doc-badge badge-complete">Complete</div>'
+    : '<div class="doc-badge badge-pending">Pending</div>';
+}
+
+async function doLogin() {
+  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  var id = document.getElementById('loginId').value.trim().toUpperCase();
+  if (!email || !id) { showError('Please enter your email and Investor ID.'); return; }
+  var btn = document.getElementById('loginBtn');
+  var spinner = document.getElementById('loginSpinner');
+  var btnText = document.getElementById('loginBtnText');
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  btnText.textContent = 'Verifying...';
+  hideError();
+  try {
+    var url = WEBHOOK + '?investor_id=' + encodeURIComponent(id) + '&email=' + encodeURIComponent(email);
+    var resp = await fetch(url);
+    if (!resp.ok) throw new Error('Server error: ' + resp.status);
+    var data = await resp.json();
+    if (!data || data.error || data.found === false) {
+      showError('Investor not found. Please check your Investor ID and email, or contact Joshua@galbreathcapital.com.');
+      return;
+    }
+    loadPortal(data, id);
+  } catch(e) {
+    showError('Unable to connect. Please try again or contact Joshua@galbreathcapital.com. (' + e.message + ')');
+  } finally {
+    btn.disabled = false;
+    spinner.style.display = 'none';
+    btnText.textContent = 'Access My Portfolio →';
+  }
+}
+
+function showError(msg) { var el = document.getElementById('loginError'); el.textContent = msg; el.style.display = 'block'; }
+function hideError() { document.getElementById('loginError').style.display = 'none'; }
 document.getElementById('loginId').onkeydown = function(e){ if(e.key==='Enter') doLogin(); };
 document.getElementById('loginEmail').onkeydown = function(e){ if(e.key==='Enter') doLogin(); };
 
-function fmt(n){ return '$' + n.toLocaleString(); }
-
-function loadPortal(inv) {
-  document.getElementById('hdrName').textContent = inv.fullName;
-  document.getElementById('hdrId').textContent = inv.id;
+function loadPortal(d, investorId) {
+  var capital = parseFloat(String(d.capital_amount).replace(/[^0-9.]/g,'')) || 0;
+  var payout = capital * 1.3;
+  var roi = capital * 0.3;
+  var fullName = d.name || 'Investor';
+  var firstName = fullName.split(' ')[0];
+  document.getElementById('hdrName').textContent = fullName;
+  document.getElementById('hdrId').textContent = investorId;
   var now = new Date();
   var h = now.getHours();
   var greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   document.getElementById('portalDate').textContent = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
-  document.getElementById('welcomeName').innerHTML = greet + ', <em>' + inv.firstName + '</em>.';
-  document.getElementById('statCapital').textContent = fmt(inv.capital);
-  document.getElementById('statProject').textContent = inv.project.split('—')[0].trim();
-  document.getElementById('statPayout').textContent = fmt(inv.capital * 1.3);
-  document.getElementById('statDate').textContent = 'Invested ' + inv.investDate;
-  document.getElementById('tlDate1').textContent = inv.investDate;
-  document.getElementById('tlDate2').textContent = inv.wireDate;
+  document.getElementById('welcomeName').innerHTML = greet + ', <em>' + firstName + '</em>.';
+  document.getElementById('statCapital').textContent = fmt(capital);
+  document.getElementById('statProject').textContent = (d.project || '—').split('—')[0].trim();
+  document.getElementById('statPayout').textContent = fmt(payout);
+  document.getElementById('statDate').textContent = d.subscription_date ? 'Since ' + d.subscription_date : 'Active';
+  document.getElementById('tlDate1').textContent = d.subscription_date || '—';
+  document.getElementById('tlDate2').textContent = d.subscription_date || '—';
   document.getElementById('projectList').innerHTML =
-    '<div class="project-item">' +
-      '<div class="proj-dot" style="background:' + inv.projColor + '"></div>' +
-      '<div style="flex:1"><div class="proj-name">' + inv.project.split('—')[0].trim() + '</div><div class="proj-type">' + inv.projType + '</div></div>' +
-      '<div><div class="proj-amount">' + fmt(inv.capital) + '</div><div style="font-size:10px;color:var(--muted);text-align:right">100%</div></div>' +
+    '<div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(201,168,76,.08)">' +
+      '<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>' +
+      '<div style="flex:1"><div style="font-size:13px;color:#fff;font-weight:500">' + (d.project || '—').split('—')[0].trim() + '</div>' +
+      '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + (d.project || '—') + '</div></div>' +
+      '<div><div style="font-family:\'DM Mono\',monospace;font-size:13px;color:var(--gold)">' + fmt(capital) + '</div>' +
+      '<div style="font-size:10px;color:var(--muted);text-align:right">100%</div></div>' +
     '</div>' +
     '<div class="payout-box">' +
-      '<div class="payout-row"><span>Principal Return</span><span>' + fmt(inv.capital) + '</span></div>' +
-      '<div class="payout-row green"><span>ROI (30%)</span><span>' + fmt(inv.capital*0.3) + '</span></div>' +
-      '<div class="payout-total"><span style="color:#fff">Total Payout</span><span>' + fmt(inv.capital*1.3) + '</span></div>' +
+      '<div class="payout-row"><span>Principal Return</span><span>' + fmt(capital) + '</span></div>' +
+      '<div class="payout-row green"><span>ROI (30%)</span><span>' + fmt(roi) + '</span></div>' +
+      '<div class="payout-total"><span style="color:#fff">Total Payout</span><span>' + fmt(payout) + '</span></div>' +
     '</div>';
-  var badges={complete:'badge-complete',pending:'badge-pending',awaiting:'badge-awaiting'};
-  var labels={complete:'Complete',pending:'Pending',awaiting:'Awaiting'};
-  document.getElementById('docList').innerHTML = inv.docs.map(function(d){
-    return '<div class="doc-item"><div class="doc-left"><div class="doc-icon">' + d.icon + '</div><div><div class="doc-name">' + d.name + '</div><div class="doc-date">' + d.date + '</div></div></div><div class="doc-badge ' + badges[d.status] + '">' + labels[d.status] + '</div></div>';
+  var docs = [
+    {name:'Subscription Agreement',val:d.subscription_agreement,icon:'📄'},
+    {name:'Promissory Note',val:d.promissory_note,icon:'📝'},
+    {name:'W-9 / W-8',val:d.w9,icon:'📋'},
+    {name:'Deed of Trust Recorded',val:d.deed_of_trust,icon:'🏦'}
+  ];
+  document.getElementById('docList').innerHTML = docs.map(function(doc) {
+    var status = docStatus(doc.val);
+    return '<div class="doc-item"><div class="doc-left"><div class="doc-icon">' + doc.icon + '</div>' +
+      '<div><div class="doc-name">' + doc.name + '</div>' +
+      '<div class="doc-date">' + (doc.val && doc.val !== 'No' && doc.val !== '' ? doc.val : 'Pending') + '</div></div></div>' +
+      docBadge(status) + '</div>';
   }).join('');
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('portal').style.display='block';
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('portal').style.display = 'block';
   setTimeout(function(){
-    document.getElementById('raiseBar').style.width='24.4%';
-    document.getElementById('softBar').style.width='18%';
-  },400);
+    document.getElementById('raiseBar').style.width = '24.4%';
+    document.getElementById('softBar').style.width = '18%';
+  }, 400);
 }
 
 function doLogout() {
-  document.getElementById('loginEmail').value='';
-  document.getElementById('loginId').value='';
-  document.getElementById('portal').style.display='none';
-  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginId').value = '';
+  document.getElementById('portal').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
 }
 </script>
 </body>
