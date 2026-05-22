@@ -277,7 +277,7 @@ async function doLogin() {
   btnText.textContent = 'Verifying...';
   hideError();
   try {
-    var url = WEBHOOK + '?investor_id=' + encodeURIComponent(id) + '&email=' + encodeURIComponent(email) + '&token=GC-2026-INV-SECURE';
+    var url = WEBHOOK + '?investor_id=' + encodeURIComponent(id) + '&email=' + encodeURIComponent(email);
     var resp = await fetch(url);
     if (!resp.ok) throw new Error('Server error: ' + resp.status);
     var data = await resp.json();
