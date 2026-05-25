@@ -117,6 +117,104 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
 .fade-up-3{animation:fadeUp .5s .2s ease both}
 .fade-up-4{animation:fadeUp .5s .3s ease both}
 @media(max-width:768px){.stats{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}.hdr{padding:0 20px}.main{padding:24px 20px 60px}.raise-closed{font-size:32px}}
+
+/* ── Chat Widget ── */
+#chatWidget{position:fixed;bottom:28px;right:28px;z-index:200;display:none;flex-direction:column;align-items:flex-end;gap:12px}
+#chatWidget.visible{display:flex}
+#chatToggle{
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;transition:transform .2s,box-shadow .2s;flex-shrink:0;
+}
+#chatToggle:hover{transform:scale(1.07);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 2px rgba(201,168,76,.4)}
+#chatToggle .toggle-icon{transition:transform .3s}
+#chatBubble{
+  width:380px;height:520px;
+  background:rgba(15,30,53,.98);border:1px solid var(--border);
+  border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:scale(.92) translateY(16px);opacity:0;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s ease;
+  pointer-events:none;
+}
+#chatBubble.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.wb-hdr{
+  background:linear-gradient(135deg,var(--navy2),var(--navy));
+  border-bottom:1px solid var(--border);
+  padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.wb-avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:700;color:var(--navy);
+}
+.wb-title{font-size:13px;font-weight:500;color:#fff;flex:1}
+.wb-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);margin-top:1px;letter-spacing:.08em}
+.wb-close{
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:18px;line-height:1;padding:2px 6px;transition:color .2s;
+}
+.wb-close:hover{color:#fff}
+.wb-msgs{
+  flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;
+  scroll-behavior:smooth;
+}
+.wb-msgs::-webkit-scrollbar{width:3px}
+.wb-msgs::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2)}
+.wb-msg{display:flex;gap:8px;animation:fadeUp .3s ease both}
+.wb-msg.user{flex-direction:row-reverse}
+.wb-msg-av{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;
+}
+.wb-msg.ai .wb-msg-av{background:linear-gradient(135deg,var(--gold),#8a6220);color:var(--navy);font-family:'Cormorant Garamond',serif;font-size:10px}
+.wb-msg.user .wb-msg-av{background:var(--navy2);color:var(--muted);border:1px solid var(--border)}
+.wb-bubble{
+  max-width:260px;padding:9px 12px;border-radius:10px;
+  font-size:12.5px;line-height:1.65;
+}
+.wb-msg.ai .wb-bubble{background:rgba(22,40,68,.9);border:1px solid var(--border);color:var(--text);border-radius:2px 10px 10px 10px}
+.wb-msg.user .wb-bubble{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.25);color:#fff;border-radius:10px 2px 10px 10px}
+.wb-bubble strong{color:var(--gold2)}
+.wb-bubble ul{padding-left:14px;margin:4px 0}
+.wb-bubble li{margin-bottom:3px}
+.wb-typing{display:flex;gap:4px;padding:10px 12px;background:rgba(22,40,68,.9);border:1px solid var(--border);border-radius:2px 10px 10px 10px;width:fit-content}
+.wb-typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:typingDot 1.2s infinite}
+.wb-typing span:nth-child(2){animation-delay:.2s}
+.wb-typing span:nth-child(3){animation-delay:.4s}
+.wb-quick{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 12px}
+.wb-qbtn{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;
+  color:var(--gold);background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);
+  padding:5px 10px;border-radius:20px;cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.wb-qbtn:hover{background:rgba(201,168,76,.14);border-color:rgba(201,168,76,.4)}
+.wb-input-area{
+  border-top:1px solid var(--border);padding:12px;
+  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;
+}
+.wb-input{
+  flex:1;background:rgba(22,40,68,.8);border:1px solid rgba(201,168,76,.2);
+  border-radius:20px;padding:9px 14px;color:#fff;font-family:'DM Sans',sans-serif;
+  font-size:12.5px;outline:none;resize:none;max-height:80px;
+  overflow-y:auto;transition:border .2s;line-height:1.4;
+}
+.wb-input:focus{border-color:rgba(201,168,76,.4)}
+.wb-input::placeholder{color:rgba(122,143,170,.45)}
+.wb-send{
+  width:32px;height:32px;border-radius:50%;border:none;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  color:var(--navy);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .2s;
+}
+.wb-send:hover{opacity:.85}
+.wb-send:disabled{opacity:.35;cursor:not-allowed}
+.wb-foot{font-family:'DM Mono',monospace;font-size:8px;color:rgba(122,143,170,.4);text-align:center;padding:6px 12px;letter-spacing:.06em;flex-shrink:0}
+@keyframes typingDot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
@@ -218,7 +316,7 @@ html,body{min-height:100vh;background:var(--navy);color:var(--text);font-family:
           <li class="tl-item"><div class="tl-dot done">✓</div><div><div class="tl-label">Subscription Executed</div><div class="tl-date" id="tlDate1"></div><div class="tl-note">Subscription agreement and W-9 on file.</div></div></li>
           <li class="tl-item"><div class="tl-dot done">✓</div><div><div class="tl-label">Capital Received</div><div class="tl-date" id="tlDate2"></div><div class="tl-note">Capital contribution confirmed and logged.</div></div></li>
           <li class="tl-item"><div class="tl-dot active">◆</div><div><div class="tl-label">Active Development Phase</div><div class="tl-date">Now → Est. Q4 2026</div><div class="tl-note">Construction and entitlement work underway across portfolio.</div></div></li>
-          <li class="tl-item"><div class="tl-dot future">○</div><div><div class="tl-label">Distribution — Phase 1</div><div class="tl-date">Est. Month 6</div><div class="tl-note">Initial return of principal + partial ROI.</div></div></li>
+          <li class="tl-item"><div class="tl-dot future">○</div><div><div class="tl-label">Distribution — Phase 1</div><div class="tl-date">Interim Distribution</div><div class="tl-note">Initial interim distribution. Joshua will confirm your specific timeline.</div></div></li>
           <li class="tl-item"><div class="tl-dot future">○</div><div><div class="tl-label">Full Payout</div><div class="tl-date">Est. Month 18–20</div><div class="tl-note">Principal + 30% ROI returned in full.</div></div></li>
         </ul>
       </div>
@@ -249,16 +347,12 @@ function fmt(n) {
   var num = parseFloat(String(n).replace(/[^0-9.]/g,'')) || 0;
   return '$' + num.toLocaleString();
 }
-function fmtDate(raw) {
-  if (!raw) return '—';
-  var dt = new Date(raw);
-  if (isNaN(dt.getTime())) return raw;
-  return dt.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
-}
+
 function docStatus(val) {
   if (!val || val === '' || val === 'No') return 'pending';
   return 'complete';
 }
+
 function docBadge(status) {
   return status === 'complete'
     ? '<div class="doc-badge badge-complete">Complete</div>'
@@ -268,7 +362,12 @@ function docBadge(status) {
 async function doLogin() {
   var email = document.getElementById('loginEmail').value.trim().toLowerCase();
   var id = document.getElementById('loginId').value.trim().toUpperCase();
-  if (!email || !id) { showError('Please enter your email and Investor ID.'); return; }
+
+  if (!email || !id) {
+    showError('Please enter your email and Investor ID.');
+    return;
+  }
+
   var btn = document.getElementById('loginBtn');
   var spinner = document.getElementById('loginSpinner');
   var btnText = document.getElementById('loginBtnText');
@@ -276,18 +375,24 @@ async function doLogin() {
   spinner.style.display = 'block';
   btnText.textContent = 'Verifying...';
   hideError();
+
   try {
     var url = WEBHOOK + '?investor_id=' + encodeURIComponent(id) + '&email=' + encodeURIComponent(email);
     var resp = await fetch(url);
+
     if (!resp.ok) throw new Error('Server error: ' + resp.status);
+
     var data = await resp.json();
+
     if (!data || data.error || data.found === false) {
-      showError('Investor not found. Please check your Investor ID and email, or contact Joshua@galbreathcapital.com.');
+      showError('Investor not found. Please check your Investor ID and email address, or contact Joshua@galbreathcapital.com.');
       return;
     }
+
     loadPortal(data, id);
+
   } catch(e) {
-    showError('Unable to connect. Please try again or contact Joshua@galbreathcapital.com. (' + e.message + ')');
+    showError('Unable to connect. Please try again or contact Joshua@galbreathcapital.com.\n(' + e.message + ')');
   } finally {
     btn.disabled = false;
     spinner.style.display = 'none';
@@ -295,36 +400,57 @@ async function doLogin() {
   }
 }
 
-function showError(msg) { var el = document.getElementById('loginError'); el.textContent = msg; el.style.display = 'block'; }
-function hideError() { document.getElementById('loginError').style.display = 'none'; }
+function showError(msg) {
+  var el = document.getElementById('loginError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() {
+  document.getElementById('loginError').style.display = 'none';
+}
+
 document.getElementById('loginId').onkeydown = function(e){ if(e.key==='Enter') doLogin(); };
 document.getElementById('loginEmail').onkeydown = function(e){ if(e.key==='Enter') doLogin(); };
 
 function loadPortal(d, investorId) {
+  // Parse capital
   var capital = parseFloat(String(d.capital_amount).replace(/[^0-9.]/g,'')) || 0;
   var payout = capital * 1.3;
   var roi = capital * 0.3;
+
+  // Name handling
   var fullName = d.name || 'Investor';
   var firstName = fullName.split(' ')[0];
+
+  // Header
   document.getElementById('hdrName').textContent = fullName;
   document.getElementById('hdrId').textContent = investorId;
+
+  // Welcome
   var now = new Date();
   var h = now.getHours();
   var greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   document.getElementById('portalDate').textContent = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
   document.getElementById('welcomeName').innerHTML = greet + ', <em>' + firstName + '</em>.';
+
+  // Stats
   document.getElementById('statCapital').textContent = fmt(capital);
   document.getElementById('statProject').textContent = (d.project || '—').split('—')[0].trim();
   document.getElementById('statPayout').textContent = fmt(payout);
+  var fmtDate = function(raw) { if (!raw) return '—'; var dt = new Date(raw); if (isNaN(dt.getTime())) return raw; return dt.toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}); };
   document.getElementById('statDate').textContent = d.subscription_date ? 'Since ' + fmtDate(d.subscription_date) : 'Active';
+
+  // Timeline
   document.getElementById('tlDate1').textContent = fmtDate(d.subscription_date);
   document.getElementById('tlDate2').textContent = fmtDate(d.subscription_date);
+
+  // Project allocation
   document.getElementById('projectList').innerHTML =
     '<div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(201,168,76,.08)">' +
       '<div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>' +
       '<div style="flex:1"><div style="font-size:13px;color:#fff;font-weight:500">' + (d.project || '—').split('—')[0].trim() + '</div>' +
       '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + (d.project || '—') + '</div></div>' +
-      '<div><div style="font-family:\'DM Mono\',monospace;font-size:13px;color:var(--gold)">' + fmt(capital) + '</div>' +
+      '<div><div style="font-family:DM Mono,monospace;font-size:13px;color:var(--gold)">' + fmt(capital) + '</div>' +
       '<div style="font-size:10px;color:var(--muted);text-align:right">100%</div></div>' +
     '</div>' +
     '<div class="payout-box">' +
@@ -332,11 +458,13 @@ function loadPortal(d, investorId) {
       '<div class="payout-row green"><span>ROI (30%)</span><span>' + fmt(roi) + '</span></div>' +
       '<div class="payout-total"><span style="color:#fff">Total Payout</span><span>' + fmt(payout) + '</span></div>' +
     '</div>';
+
+  // Documents
   var docs = [
-    {name:'Subscription Agreement',val:d.subscription_agreement,icon:'📄'},
-    {name:'Promissory Note',val:d.promissory_note,icon:'📝'},
-    {name:'W-9 / W-8',val:d.w9,icon:'📋'},
-    {name:'Deed of Trust Recorded',val:d.deed_of_trust,icon:'🏦'}
+    {name:'Subscription Agreement', val:d.subscription_agreement, icon:'📄'},
+    {name:'Promissory Note', val:d.promissory_note, icon:'📝'},
+    {name:'W-9 / W-8', val:d.w9, icon:'📋'},
+    {name:'Deed of Trust Recorded', val:d.deed_of_trust, icon:'🏦'}
   ];
   document.getElementById('docList').innerHTML = docs.map(function(doc) {
     var status = docStatus(doc.val);
@@ -345,8 +473,11 @@ function loadPortal(d, investorId) {
       '<div class="doc-date">' + (doc.val && doc.val !== 'No' && doc.val !== '' ? doc.val : 'Pending') + '</div></div></div>' +
       docBadge(status) + '</div>';
   }).join('');
+
+  // Show portal
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('portal').style.display = 'block';
+
   setTimeout(function(){
     document.getElementById('raiseBar').style.width = '24.4%';
     document.getElementById('softBar').style.width = '18%';
@@ -358,6 +489,165 @@ function doLogout() {
   document.getElementById('loginId').value = '';
   document.getElementById('portal').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('chatWidget').classList.remove('visible');
+  wbOpen = false;
+  document.getElementById('chatBubble').classList.remove('open');
+  document.getElementById('toggleIcon').textContent = '💬';
+}
+</script>
+
+<!-- CHAT WIDGET -->
+<div id="chatWidget">
+  <div id="chatBubble">
+    <div class="wb-hdr">
+      <div class="wb-avatar">JG</div>
+      <div style="flex:1">
+        <div class="wb-title">Investor Assistant</div>
+        <div class="wb-sub">Galbreath Capital · AI Q&A</div>
+      </div>
+      <button class="wb-close" onclick="toggleChat()">&#215;</button>
+    </div>
+    <div class="wb-msgs" id="wbMsgs">
+      <div class="wb-msg ai">
+        <div class="wb-msg-av">JG</div>
+        <div class="wb-bubble">Hello! I can answer questions about your investment, our projects, timelines, or the offering. What would you like to know?</div>
+      </div>
+    </div>
+    <div class="wb-quick" id="wbQuick">
+      <button class="wb-qbtn" onclick="wbQuickSend('How does the 30% ROI work?')">30% ROI</button>
+      <button class="wb-qbtn" onclick="wbQuickSend('What are the 5 projects?')">5 Projects</button>
+      <button class="wb-qbtn" onclick="wbQuickSend('What is the investment timeline?')">Timeline</button>
+      <button class="wb-qbtn" onclick="wbQuickSend('What documents do I need?')">Documents</button>
+    </div>
+    <div class="wb-input-area">
+      <textarea class="wb-input" id="wbInput" placeholder="Ask a question..." rows="1"
+        onkeydown="wbKey(event)" oninput="wbResize(this)"></textarea>
+      <button class="wb-send" id="wbSend" onclick="wbSend()">&#8593;</button>
+    </div>
+    <div class="wb-foot">Powered by Claude AI &middot; Not financial advice</div>
+  </div>
+  <button id="chatToggle" onclick="toggleChat()" title="Ask a question">
+    <span class="toggle-icon" id="toggleIcon">&#128172;</span>
+  </button>
+</div>
+
+<script>
+var WB_SYSTEM = "You are a concise AI assistant for Galbreath Capital, LLC. Help accredited investors understand their investment. Keep answers SHORT (2-4 sentences max) — this is a small chat widget. Use ** for bold key terms. Direct personal account questions to Joshua@galbreathcapital.com.\n\nKey facts:\n- 30% ROI on invested capital. Distributions are structured in two phases — an interim distribution and a full payout at maturity. Joshua will walk you through the specific timeline on your call.\n- 5 TX projects: Parker Henderson (FW, 46-unit duplex), Mayfair Street (Ennis, 63-lot mixed-use), Norman Avenue (FW, 16-unit fourplex), Sanford Road (Arlington, 11-unit townhomes), 5701 Calhoun (Houston, 8-unit luxury mid-rise)\n- Raise: $17.21M target, $4.2M closed, projected close July 2026\n- Security: Promissory Note + Deed of Trust recorded on property\n- Reg D 506(c) private placement, accredited investors only\n- Contact: Joshua@galbreathcapital.com\n- Not financial advice. Not an offer to sell securities.";
+
+var wbOpen = false;
+var wbThinking = false;
+var wbHistory = [];
+
+function toggleChat() {
+  wbOpen = !wbOpen;
+  var bubble = document.getElementById('chatBubble');
+  var icon = document.getElementById('toggleIcon');
+  if (wbOpen) {
+    bubble.classList.add('open');
+    icon.innerHTML = '&#215;';
+    setTimeout(function(){ document.getElementById('wbInput').focus(); }, 350);
+  } else {
+    bubble.classList.remove('open');
+    icon.innerHTML = '&#128172;';
+  }
+}
+
+// Show widget when portal loads
+var _origLoadPortal = loadPortal;
+loadPortal = function(d, id) {
+  _origLoadPortal(d, id);
+  document.getElementById('chatWidget').classList.add('visible');
+};
+
+function wbResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+function wbKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); wbSend(); }
+}
+
+function wbQuickSend(text) {
+  document.getElementById('wbInput').value = text;
+  document.getElementById('wbQuick').style.display = 'none';
+  wbSend();
+}
+
+function wbAddMsg(role, text) {
+  var mc = document.getElementById('wbMsgs');
+  var div = document.createElement('div');
+  div.className = 'wb-msg ' + role;
+  var av = role === 'ai' ? 'JG' : 'ME';
+  div.innerHTML = '<div class="wb-msg-av">' + av + '</div><div class="wb-bubble">' + wbFmt(text) + '</div>';
+  mc.appendChild(div);
+  mc.scrollTop = mc.scrollHeight;
+}
+
+function wbFmt(text) {
+  var escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var bolded = escaped.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  return bolded.split('\n').filter(function(l){return l.trim();}).map(function(l){
+    var t = l.trim();
+    if (t.startsWith('- ')) return '<li>' + t.slice(2) + '</li>';
+    return '<span>' + t + '</span><br>';
+  }).join('');
+}
+
+function wbShowTyping() {
+  var mc = document.getElementById('wbMsgs');
+  var div = document.createElement('div');
+  div.className = 'wb-msg ai';
+  div.id = 'wbTyping';
+  div.innerHTML = '<div class="wb-msg-av">JG</div><div class="wb-typing"><span></span><span></span><span></span></div>';
+  mc.appendChild(div);
+  mc.scrollTop = mc.scrollHeight;
+}
+
+function wbHideTyping() {
+  var el = document.getElementById('wbTyping');
+  if (el) el.remove();
+}
+
+async function wbSend() {
+  if (wbThinking) return;
+  var input = document.getElementById('wbInput');
+  var text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  wbHistory.push({role:'user', content: text});
+  wbAddMsg('user', text);
+  wbThinking = true;
+  document.getElementById('wbSend').disabled = true;
+  wbShowTyping();
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        system: WB_SYSTEM,
+        messages: wbHistory
+      })
+    });
+    var data = await resp.json();
+    var reply = 'Sorry, I had trouble responding. Please email Joshua@galbreathcapital.com.';
+    if (data.content) {
+      for (var i = 0; i < data.content.length; i++) {
+        if (data.content[i].type === 'text') { reply = data.content[i].text; break; }
+      }
+    }
+    wbHistory.push({role:'assistant', content: reply});
+    wbHideTyping();
+    wbAddMsg('ai', reply);
+  } catch(e) {
+    wbHideTyping();
+    wbAddMsg('ai', 'Connection error. Please email **Joshua@galbreathcapital.com**.');
+  }
+  wbThinking = false;
+  document.getElementById('wbSend').disabled = false;
 }
 </script>
 </body>
