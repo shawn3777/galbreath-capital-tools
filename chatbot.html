@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galbreath Capital — Investor Q&A</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0f1e35;--navy2:#162844;--navy3:#1c3256;
+  --gold:#c9a84c;--gold2:#e8c97a;--gold-dim:rgba(201,168,76,.12);
+  --text:#e8e0d0;--muted:#7a8faa;--border:rgba(201,168,76,.18);
+  --green:#4caf82;--surface:rgba(22,40,68,.7);
+}
+html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 10%,rgba(201,168,76,.05) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 85% 90%,rgba(14,40,80,.5) 0%,transparent 60%);
+}
+
+/* Layout */
+.layout{display:flex;height:100vh;position:relative;z-index:1}
+
+/* Sidebar */
+.sidebar{
+  width:300px;flex-shrink:0;
+  background:rgba(15,30,53,.95);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:32px 24px;
+  backdrop-filter:blur(12px);
+}
+.sidebar-logo{margin-bottom:40px}
+.logo-name{
+  font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;
+  color:var(--gold);letter-spacing:.08em;line-height:1.3;
+}
+.logo-sub{
+  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin-top:5px;
+}
+.sidebar-section{margin-bottom:28px}
+.sidebar-label{
+  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(201,168,76,.5);margin-bottom:14px;
+  padding-bottom:8px;border-bottom:1px solid rgba(201,168,76,.1);
+}
+.quick-q{
+  display:block;width:100%;text-align:left;background:none;border:none;
+  color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;
+  padding:9px 12px;border-radius:3px;cursor:pointer;transition:all .2s;
+  line-height:1.4;border:1px solid transparent;margin-bottom:6px;
+}
+.quick-q:hover{
+  color:var(--text);background:rgba(201,168,76,.06);
+  border-color:rgba(201,168,76,.15);
+}
+.quick-q::before{content:'→ ';color:var(--gold);opacity:.5;font-size:10px}
+.sidebar-stats{margin-top:auto}
+.stat-pill{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid rgba(201,168,76,.08);
+}
+.stat-pill:last-child{border-bottom:none}
+.sp-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em}
+.sp-val{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold);font-weight:600}
+.live-dot-wrap{display:flex;align-items:center;gap:6px;margin-top:20px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.live-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--green);letter-spacing:.12em}
+
+/* Chat area */
+.chat-area{flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* Header */
+.chat-hdr{
+  background:rgba(15,30,53,.9);border-bottom:1px solid var(--border);
+  padding:0 32px;height:64px;display:flex;align-items:center;
+  justify-content:space-between;backdrop-filter:blur(12px);flex-shrink:0;
+}
+.chat-hdr-left{display:flex;align-items:center;gap:14px}
+.chat-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;
+  color:var(--navy);flex-shrink:0;
+}
+.chat-hdr-name{font-size:14px;font-weight:500;color:#fff}
+.chat-hdr-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px}
+.chat-hdr-right{display:flex;align-items:center;gap:16px}
+.hdr-badge{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;
+  color:var(--green);background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.2);
+  padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;
+}
+.clear-btn{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);background:none;border:none;
+  cursor:pointer;transition:color .2s;
+}
+.clear-btn:hover{color:var(--text)}
+
+/* Messages */
+.messages{
+  flex:1;overflow-y:auto;padding:32px;
+  display:flex;flex-direction:column;gap:20px;
+  scroll-behavior:smooth;
+}
+.messages::-webkit-scrollbar{width:4px}
+.messages::-webkit-scrollbar-track{background:transparent}
+.messages::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px}
+
+/* Message bubbles */
+.msg{display:flex;gap:12px;max-width:780px;animation:fadeUp .35s ease both}
+.msg.user{flex-direction:row-reverse;margin-left:auto}
+.msg-avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;margin-top:4px;
+}
+.msg.ai .msg-avatar{
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  color:var(--navy);font-family:'Cormorant Garamond',serif;font-size:13px;
+}
+.msg.user .msg-avatar{
+  background:var(--navy3);color:var(--muted);
+  border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;
+}
+.msg-body{flex:1;min-width:0}
+.msg-meta{
+  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;
+  color:var(--muted);margin-bottom:6px;
+}
+.msg.user .msg-meta{text-align:right}
+.msg-bubble{
+  padding:14px 18px;border-radius:4px;font-size:14px;line-height:1.75;
+}
+.msg.ai .msg-bubble{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);border-radius:0 4px 4px 4px;
+}
+.msg.user .msg-bubble{
+  background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.08));
+  border:1px solid rgba(201,168,76,.25);
+  color:#fff;border-radius:4px 0 4px 4px;text-align:right;
+}
+.msg-bubble p{margin-bottom:10px}
+.msg-bubble p:last-child{margin-bottom:0}
+.msg-bubble strong{color:var(--gold2);font-weight:600}
+.msg-bubble ul{padding-left:16px;margin:8px 0}
+.msg-bubble li{margin-bottom:5px;color:var(--text)}
+.msg-bubble .highlight{
+  display:inline-block;font-family:'DM Mono',monospace;font-size:12px;
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);
+  padding:2px 8px;border-radius:3px;color:var(--gold);margin:2px 0;
+}
+
+/* Typing indicator */
+.typing-indicator{display:flex;gap:12px;max-width:780px;animation:fadeUp .35s ease both}
+.typing-dots{
+  display:flex;align-items:center;gap:5px;
+  padding:14px 18px;background:var(--surface);border:1px solid var(--border);
+  border-radius:0 4px 4px 4px;
+}
+.typing-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--muted);
+  animation:typingDot 1.2s infinite;
+}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+
+/* Welcome card */
+.welcome-card{
+  max-width:560px;margin:0 auto;text-align:center;
+  padding:48px 40px;background:var(--surface);border:1px solid var(--border);
+  border-radius:4px;position:relative;overflow:hidden;
+  animation:fadeUp .5s ease both;
+}
+.welcome-card::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.wc-icon{
+  width:56px;height:56px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--navy);
+}
+.wc-title{
+  font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;
+  color:#fff;margin-bottom:10px;
+}
+.wc-sub{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.wc-topics{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px;
+}
+.wc-topic{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;
+  color:var(--gold);background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);
+  padding:5px 12px;border-radius:20px;
+}
+.wc-disclaimer{
+  font-size:10px;color:rgba(122,143,170,.6);line-height:1.6;
+  border-top:1px solid rgba(201,168,76,.08);padding-top:16px;margin-top:4px;
+}
+
+/* Input area */
+.input-area{
+  border-top:1px solid var(--border);padding:20px 32px 24px;
+  background:rgba(15,30,53,.8);backdrop-filter:blur(12px);flex-shrink:0;
+}
+.input-wrap{
+  display:flex;gap:12px;align-items:flex-end;
+  background:rgba(22,40,68,.8);border:1px solid var(--border);
+  border-radius:4px;padding:12px 16px;transition:border-color .2s;
+}
+.input-wrap:focus-within{border-color:rgba(201,168,76,.4)}
+.msg-input{
+  flex:1;background:none;border:none;outline:none;
+  color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;
+  line-height:1.5;resize:none;max-height:120px;overflow-y:auto;
+  min-height:24px;
+}
+.msg-input::placeholder{color:rgba(122,143,170,.5)}
+.msg-input::-webkit-scrollbar{width:3px}
+.msg-input::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2)}
+.send-btn{
+  width:36px;height:36px;border-radius:3px;border:none;
+  background:linear-gradient(135deg,var(--gold),#a8832a);
+  color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:opacity .2s;font-size:15px;
+}
+.send-btn:hover{opacity:.85}
+.send-btn:disabled{opacity:.4;cursor:not-allowed}
+.input-hint{
+  font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);
+  margin-top:10px;letter-spacing:.08em;text-align:center;
+}
+
+/* Disclaimer bar */
+.disclaimer-bar{
+  text-align:center;font-size:10px;color:rgba(122,143,170,.5);
+  padding:8px 32px;letter-spacing:.06em;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes typingDot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .messages{padding:20px 16px}
+  .input-area{padding:14px 16px 18px}
+  .chat-hdr{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-name">Galbreath Capital, LLC</div>
+      <div class="logo-sub">Investor Q&A · AI Assistant</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Questions</div>
+      <button class="quick-q" onclick="sendQuick('What is the minimum investment amount?')">Minimum investment amount</button>
+      <button class="quick-q" onclick="sendQuick('How does the 30% ROI work?')">How does the 30% ROI work?</button>
+      <button class="quick-q" onclick="sendQuick('What are the 5 active projects?')">The 5 active projects</button>
+      <button class="quick-q" onclick="sendQuick('What is the investment timeline?')">Investment timeline</button>
+      <button class="quick-q" onclick="sendQuick('How do I wire funds?')">How to wire funds</button>
+      <button class="quick-q" onclick="sendQuick('What is a Reg D 506(c) offering?')">What is Reg D 506(c)?</button>
+      <button class="quick-q" onclick="sendQuick('How are investors protected?')">Investor protections</button>
+      <button class="quick-q" onclick="sendQuick('What documents do I need to sign?')">Required documents</button>
+    </div>
+
+    <div class="sidebar-stats">
+      <div class="sidebar-label">Offering Snapshot</div>
+      <div class="stat-pill"><span class="sp-label">Target Raise</span><span class="sp-val">$17.21M</span></div>
+      <div class="stat-pill"><span class="sp-label">Target ROI</span><span class="sp-val">30%</span></div>
+      <div class="stat-pill"><span class="sp-label">Projects</span><span class="sp-val">5 TX Sites</span></div>
+      <div class="stat-pill"><span class="sp-label">Close Est.</span><span class="sp-val">Jul 2026</span></div>
+      <div class="live-dot-wrap">
+        <div class="live-dot"></div>
+        <div class="live-label">AI Powered · Claude</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-area">
+    <div class="chat-hdr">
+      <div class="chat-hdr-left">
+        <div class="chat-avatar">JG</div>
+        <div>
+          <div class="chat-hdr-name">Galbreath Capital Assistant</div>
+          <div class="chat-hdr-sub">Investor Q&A · Powered by Claude AI</div>
+        </div>
+      </div>
+      <div class="chat-hdr-right">
+        <div class="hdr-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite"></span>Online</div>
+        <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
+      </div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="welcome-card" id="welcomeCard">
+        <div class="wc-icon">JG</div>
+        <div class="wc-title">How can I help you today?</div>
+        <div class="wc-sub">Ask me anything about the Galbreath Capital offering — projects, returns, timeline, documents, or how to get started.</div>
+        <div class="wc-topics">
+          <span class="wc-topic">Returns & ROI</span>
+          <span class="wc-topic">5 TX Projects</span>
+          <span class="wc-topic">Investment Process</span>
+          <span class="wc-topic">Reg D 506(c)</span>
+          <span class="wc-topic">Documents</span>
+          <span class="wc-topic">Timeline</span>
+        </div>
+        <div class="wc-disclaimer">This assistant provides general information about the Galbreath Capital offering. For legal or financial advice, consult your advisors. This is not an offer to sell securities.</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea
+          class="msg-input"
+          id="msgInput"
+          placeholder="Ask about projects, returns, how to invest…"
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">↑</button>
+      </div>
+      <div class="input-hint">Press Enter to send · Shift+Enter for new line · Contact Joshua@galbreathcapital.com for private matters</div>
+    </div>
+
+    <div class="disclaimer-bar">
+      CONFIDENTIAL · FOR ACCREDITED INVESTORS ONLY · Galbreath Capital, LLC · Reg D 506(c) · Not an offer to sell securities
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// GALBREATH CAPITAL KNOWLEDGE BASE
+// ============================================================
+const SYSTEM_PROMPT = `You are an AI assistant for Galbreath Capital, LLC — a Texas real estate development company. You represent Joshua Galbreath, the Principal. You help accredited investors understand the Galbreath Capital offering.
+
+## YOUR PERSONA
+- Professional, knowledgeable, warm — speak like a trusted capital markets associate
+- Use precise financial language without being overly technical
+- When you don't know something specific (like a personal investor's account details), direct them to contact Joshua directly
+- Never invent numbers or make guarantees — stick to the facts below
+
+## GALBREATH CAPITAL OVERVIEW
+- **Entity:** Galbreath Capital, LLC
+- **Principal:** Joshua Galbreath | Joshua@galbreathcapital.com
+- **Offering Type:** Reg D 506(c) — Private Placement, Accredited Investors Only
+- **Broker of Record:** Shawn Latham, Legacy Capital Network
+- **Total Raise Target:** $17.21M
+- **Capital Closed to Date:** $4.2M (24.4% closed)
+- **Soft Commitments:** ~$3.1M additional
+- **Target ROI:** 30% on invested capital
+- **Hold Period / Payout Timeline:** Approximately 18–20 months from investment date
+- **Projected Raise Close:** Mid-to-Late July 2026
+- **Active Pipeline:** 179 accredited investor leads
+
+## THE 5 PROJECTS
+1. **Parker Henderson** — 46-Unit Duplex Development, Fort Worth, TX | Raise: $5,445,000
+2. **Mayfair Street** — 63-Lot Mixed-Use Development, Ennis, TX | Raise: $2,340,000
+3. **Norman Avenue** — 16-Unit Fourplex, Fort Worth, TX | Raise: $3,835,000
+4. **Sanford Road Townhomes** — 11-Unit Townhome, Arlington, TX | Raise: $1,997,000
+5. **5701 Calhoun Road** — 8-Unit Luxury Mid-Rise, Houston, TX (near TSU) | Raise: $3,588,000
+
+All 5 projects are in active development. Construction and entitlement work is underway.
+
+## INVESTMENT TERMS & STRUCTURE
+- **Investment vehicle:** Promissory Note secured by a Deed of Trust on the property
+- **Return:** 30% ROI on principal — paid at maturity
+- **Distributions:** Structured in two phases — an interim distribution and a full payout at maturity. Joshua will walk you through the specific timeline on your call.
+- **Minimum investment:** $50,000 (confirm with Joshua for current minimums)
+- **Investor protections:** Deed of Trust recorded against the property (real estate collateral), subscription agreement, promissory note
+- **Accreditation:** All investors must be verified accredited under Reg D 506(c) — Rule 506(c) allows general solicitation but requires verification
+
+## REQUIRED DOCUMENTS (per investor)
+1. Subscription Agreement — main investment contract
+2. Promissory Note — the debt instrument specifying return terms
+3. W-9 (US persons) or W-8 (foreign persons) — tax form
+4. Deed of Trust — recorded against the property as collateral
+
+## INVESTMENT PROCESS (step by step)
+1. Investor expresses interest and confirms accreditation
+2. Galbreath Capital sends PPM (Private Placement Memorandum) for review
+3. Investor reviews offering documents (subscription agreement, promissory note)
+4. Documents executed (signed)
+5. Wire transfer sent to Galbreath Capital account
+6. Deed of Trust recorded on property
+7. Investor receives confirmation and portal access
+8. Ongoing updates via investor portal and milestone reports
+
+## WIRE INSTRUCTIONS
+Wire instructions are provided privately to each investor after document execution. Contact Joshua@galbreathcapital.com for wiring details — they are not shared publicly for security reasons.
+
+## WHAT IS REG D 506(c)?
+- A private placement exemption from SEC registration under Regulation D
+- Allows issuers to generally advertise/solicit the offering (unlike 506(b))
+- REQUIRES that ALL investors be verified accredited (not just self-certified)
+- Accredited investor = $200K+ annual income ($300K joint) OR $1M+ net worth excluding primary residence
+- Verification methods: CPA letter, attorney letter, brokerage statement, or third-party verification service
+
+## INVESTOR PORTAL
+- Investors log in at the secure portal with their email + Investor ID (format: INV-001)
+- Dashboard shows: capital committed, 30% payout target, document status, investment timeline, raise progress
+- Portal data is live from the Google Sheet ledger
+
+## KEY CONTACTS
+- **Joshua Galbreath** — Principal, all investment questions → Joshua@galbreathcapital.com
+- **Galbreath Capital** — General inquiries → Joshua@galbreathcapital.com
+
+## IMPORTANT DISCLAIMERS TO INCLUDE WHEN RELEVANT
+- This is not an offer to sell securities — it is informational only
+- Past performance does not guarantee future results
+- Real estate investments carry risk including loss of principal
+- Always consult your financial advisor and legal counsel before investing
+
+## RESPONSE STYLE
+- Keep answers concise but complete — investors are sophisticated
+- Use **bold** for key terms and numbers
+- Use bullet lists for multi-part answers
+- Always end with an invitation to contact Joshua for specific or private questions
+- Never reveal internal tools, n8n, GitHub, or operational infrastructure details`;
+
+// ============================================================
+// CHAT STATE
+// ============================================================
+let messages = [];
+let isThinking = false;
+
+function getTime() {
+  return new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function clearChat() {
+  messages = [];
+  const mc = document.getElementById('messages');
+  mc.innerHTML = '';
+  // Restore welcome card
+  const wc = document.createElement('div');
+  wc.className = 'welcome-card';
+  wc.id = 'welcomeCard';
+  wc.innerHTML = `
+    <div class="wc-icon">JG</div>
+    <div class="wc-title">How can I help you today?</div>
+    <div class="wc-sub">Ask me anything about the Galbreath Capital offering — projects, returns, timeline, documents, or how to get started.</div>
+    <div class="wc-topics">
+      <span class="wc-topic">Returns & ROI</span>
+      <span class="wc-topic">5 TX Projects</span>
+      <span class="wc-topic">Investment Process</span>
+      <span class="wc-topic">Reg D 506(c)</span>
+      <span class="wc-topic">Documents</span>
+      <span class="wc-topic">Timeline</span>
+    </div>
+    <div class="wc-disclaimer">This assistant provides general information about the Galbreath Capital offering. For legal or financial advice, consult your advisors. This is not an offer to sell securities.</div>
+  `;
+  mc.appendChild(wc);
+}
+
+function sendQuick(text) {
+  document.getElementById('msgInput').value = text;
+  sendMessage();
+}
+
+function addMessage(role, content) {
+  const mc = document.getElementById('messages');
+  // Remove welcome card on first message
+  const wc = document.getElementById('welcomeCard');
+  if (wc) wc.remove();
+
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+
+  const isAI = role === 'ai';
+  const avatarLabel = isAI ? 'JG' : 'YOU';
+  const metaLabel = isAI ? 'Galbreath Capital Assistant · ' + getTime() : 'You · ' + getTime();
+
+  div.innerHTML = `
+    <div class="msg-avatar">${avatarLabel}</div>
+    <div class="msg-body">
+      <div class="msg-meta">${metaLabel}</div>
+      <div class="msg-bubble">${formatContent(content)}</div>
+    </div>
+  `;
+  mc.appendChild(div);
+  mc.scrollTop = mc.scrollHeight;
+  return div;
+}
+
+function formatContent(text) {
+  // Convert markdown-like to HTML
+  let html = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/`([^`]+)`/g,'<span class="highlight">$1</span>');
+
+  // Handle bullet lists
+  const lines = html.split('\n');
+  let result = [];
+  let inList = false;
+
+  for (let line of lines) {
+    const stripped = line.trim();
+    if (stripped.startsWith('- ') || stripped.startsWith('• ')) {
+      if (!inList) { result.push('<ul>'); inList = true; }
+      result.push('<li>' + stripped.slice(2) + '</li>');
+    } else if (stripped.match(/^\d+\.\s/)) {
+      if (!inList) { result.push('<ul>'); inList = true; }
+      result.push('<li>' + stripped.replace(/^\d+\.\s/, '') + '</li>');
+    } else {
+      if (inList) { result.push('</ul>'); inList = false; }
+      if (stripped) result.push('<p>' + stripped + '</p>');
+    }
+  }
+  if (inList) result.push('</ul>');
+  return result.join('');
+}
+
+function showTyping() {
+  const mc = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'typing-indicator';
+  div.id = 'typingIndicator';
+  div.innerHTML = `
+    <div class="msg-avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6220);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:700;color:var(--navy);flex-shrink:0;margin-top:4px">JG</div>
+    <div class="typing-dots">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  mc.appendChild(div);
+  mc.scrollTop = mc.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+async function sendMessage() {
+  if (isThinking) return;
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  // Clear input
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Add user message to state and UI
+  messages.push({role:'user', content: text});
+  addMessage('user', text);
+
+  // Disable send
+  isThinking = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: messages
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error?.message || 'API error ' + response.status);
+    }
+
+    const data = await response.json();
+    const reply = data.content?.find(b => b.type === 'text')?.text || 'I was unable to generate a response. Please try again.';
+
+    messages.push({role:'assistant', content: reply});
+    hideTyping();
+    addMessage('ai', reply);
+
+  } catch(err) {
+    hideTyping();
+    addMessage('ai', `I'm having trouble connecting right now. Please try again in a moment, or contact **Joshua@galbreathcapital.com** directly for immediate assistance.\n\n_Error: ${err.message}_`);
+  } finally {
+    isThinking = false;
+    document.getElementById('sendBtn').disabled = false;
+    input.focus();
+  }
+}
+</script>
+</body>
+</html>
