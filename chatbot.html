@@ -583,7 +583,7 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const response = await fetch('https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-chatbot', {
+    const response = await fetch('https://galbreathcapital.app.n8n.cloud/webhook/galbreath-chatbot', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -595,24 +595,44 @@ async function sendMessage() {
     });
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error?.message || 'API error ' + response.status);
+      const errText = await response.text().catch(() => '');
+      let errMsg = 'API error ' + response.status;
+      try { const errJson = JSON.parse(errText); errMsg = errJson.error?.message || errMsg; } catch(_) {}
+      throw new Error(errMsg);
+    }
+
+    // Robust response extractor — handles every shape n8n can return:
+    // 1. Raw Claude API: { content: [{ type:'text', text:'...' }] }
+    // 2. n8n Set node passthrough: { output: '...' } or { reply: '...' } or { text: '...' } or { message: '...' } or { response: '...' }
+    // 3. n8n array wrap: [{ output: '...' }] or [{ text: '...' }]
+    // 4. Plain string body
+    function extractReply(data) {
+      if (typeof data === 'string' && data.trim()) return data.trim();
+      // Unwrap n8n array envelope
+      if (Array.isArray(data) && data.length > 0) data = data[0];
+      if (!data || typeof data !== 'object') return null;
+      // Raw Claude API shape
+      if (Array.isArray(data.content)) {
+        const tb = data.content.find(b => b.type === 'text');
+        if (tb?.text) return tb.text;
+      }
+      // n8n common output keys (order matters — most specific first)
+      for (const key of ['output','reply','text','message','response','answer','result']) {
+        if (typeof data[key] === 'string' && data[key].trim()) return data[key].trim();
+      }
+      // Last resort: stringify (for debugging)
+      return null;
     }
 
     let reply = 'I was unable to generate a response. Please try again.';
     try {
-      const data = await response.json();
-      if (data.content && Array.isArray(data.content)) {
-        const textBlock = data.content.find(b => b.type === 'text');
-        if (textBlock) reply = textBlock.text;
-      } else if (data.text) {
-        reply = data.text;
-      } else if (typeof data === 'string') {
-        reply = data;
-      }
+      const rawText = await response.text();
+      let data;
+      try { data = JSON.parse(rawText); } catch(_) { data = rawText; }
+      const extracted = extractReply(data);
+      if (extracted) reply = extracted;
     } catch(parseErr) {
-      const text = await response.text();
-      reply = text || reply;
+      // reply stays as default fallback
     }
 
     messages.push({role:'assistant', content: reply});
