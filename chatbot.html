@@ -599,8 +599,21 @@ async function sendMessage() {
       throw new Error(err.error?.message || 'API error ' + response.status);
     }
 
-    const data = await response.json();
-    const reply = data.content?.find(b => b.type === 'text')?.text || 'I was unable to generate a response. Please try again.';
+    let reply = 'I was unable to generate a response. Please try again.';
+    try {
+      const data = await response.json();
+      if (data.content && Array.isArray(data.content)) {
+        const textBlock = data.content.find(b => b.type === 'text');
+        if (textBlock) reply = textBlock.text;
+      } else if (data.text) {
+        reply = data.text;
+      } else if (typeof data === 'string') {
+        reply = data;
+      }
+    } catch(parseErr) {
+      const text = await response.text();
+      reply = text || reply;
+    }
 
     messages.push({role:'assistant', content: reply});
     hideTyping();
