@@ -583,14 +583,12 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const response = await fetch('https://galbreathcaptital.app.n8n.cloud/webhook/galbreath-chatbot', {
+    const response = await fetch('https://galbreathcaptital.app.n8n.cloud/webhook/6729c4be-4821-47d3-a90a-38ad33defb83/chat', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: messages
+        chatInput: text,
+        sessionId: 'galbreath-' + Date.now()
       })
     });
 
@@ -602,7 +600,7 @@ async function sendMessage() {
     }
 
     const data = await response.json();
-    const reply = (typeof data === 'string' ? data : data?.reply || data?.text || data?.output || data?.message || 'I was unable to generate a response. Please try again.');
+    const reply = data?.output || data?.text || data?.message || data?.response || 'I was unable to generate a response. Please try again.';
 
     messages.push({role:'assistant', content: reply});
     hideTyping();
