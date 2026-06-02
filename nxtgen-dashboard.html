@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NXTGEN Consulting — Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090c;--bg2:#0f1117;--bg3:#161820;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --text:#e8e6e0;--muted:#5a5f72;--subtle:#2a2d38;
+  --gold:#c9a84c;--gold2:rgba(201,168,76,.15);
+  --green:#1e4d2b;--green2:#4caf70;--green3:rgba(76,175,112,.15);
+  --blue:#1a3a5c;--blue2:#4a8fc9;--blue3:rgba(74,143,201,.15);
+  --red:#8b1a1a;--red2:#e05c3a;--red3:rgba(224,92,58,.12);
+  --teal:#0d3d3a;--teal2:#2dd4bf;--teal3:rgba(45,212,191,.12);
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 10%,rgba(201,168,76,.04) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 90%,rgba(76,175,112,.03) 0%,transparent 60%);
+}
+
+/* HEADER */
+.hdr{
+  position:relative;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px;border-bottom:1px solid var(--border);
+  background:rgba(8,9,12,.8);backdrop-filter:blur(20px);
+  position:sticky;top:0;
+}
+.hdr-left{display:flex;align-items:center;gap:16px}
+.hdr-mark{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),#8a6220);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#08090c;
+}
+.hdr-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff;letter-spacing:.02em}
+.hdr-sub{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:2px;font-family:'DM Mono',monospace}
+.hdr-right{display:flex;align-items:center;gap:20px}
+.hdr-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(76,175,112,.1);border:1px solid rgba(76,175,112,.2);border-radius:20px;padding:5px 12px;font-size:10px;color:var(--green2);font-family:'DM Mono',monospace;letter-spacing:.08em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green2);animation:pulse 2s infinite}
+
+/* MAIN */
+.main{position:relative;z-index:10;max-width:1280px;margin:0 auto;padding:36px 40px 80px}
+
+/* GREETING */
+.greeting{margin-bottom:36px}
+.greeting-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.greeting-name{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.02em}
+.greeting-name span{color:var(--gold)}
+.greeting-sub{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* TOP STATS */
+.top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden;cursor:default}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat.gold::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.stat.green::before{background:linear-gradient(90deg,var(--green2),transparent)}
+.stat.blue::before{background:linear-gradient(90deg,var(--blue2),transparent)}
+.stat.teal::before{background:linear-gradient(90deg,var(--teal2),transparent)}
+.stat-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.stat-value{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;color:#fff;line-height:1}
+.stat-value.gold{color:var(--gold)}
+.stat-value.green{color:var(--green2)}
+.stat-value.blue{color:var(--blue2)}
+.stat-value.teal{color:var(--teal2)}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;overflow:hidden}
+.card-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.card-title-left{display:flex;align-items:center;gap:8px}
+.card-accent{width:6px;height:6px;border-radius:50%}
+
+/* COMPANY CARDS */
+.company-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;overflow:hidden;transition:border-color .2s}
+.company-card:hover{border-color:var(--border2)}
+.company-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.company-card.galbreath::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.company-card.afhomes::after{background:linear-gradient(90deg,var(--green2),transparent)}
+.company-card.vat::after{background:linear-gradient(90deg,var(--blue2),transparent)}
+
+.co-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.co-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:#fff}
+.co-type{font-size:10px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;letter-spacing:.08em}
+.co-mark{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+.co-mark.galbreath{background:var(--gold2);color:var(--gold)}
+.co-mark.afhomes{background:var(--green3);color:var(--green2)}
+.co-mark.vat{background:var(--blue3);color:var(--blue2)}
+
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-family:'DM Mono',monospace}
+.badge-active{background:var(--green3);color:var(--green2);border:1px solid rgba(76,175,112,.25)}
+.badge-building{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
+.badge-operating{background:var(--blue3);color:var(--blue2);border:1px solid rgba(74,143,201,.25)}
+
+.co-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.co-metric{background:var(--bg3);border-radius:8px;padding:12px}
+.co-metric-label{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:4px}
+.co-metric-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:600;color:#fff}
+.co-metric-val.gold{color:var(--gold)}
+.co-metric-val.green{color:var(--green2)}
+.co-metric-val.blue{color:var(--blue2)}
+
+.co-next{margin-top:14px;padding:12px;background:var(--bg3);border-radius:8px;border-left:2px solid var(--border2)}
+.co-next-label{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:4px}
+.co-next-text{font-size:12px;color:var(--text);line-height:1.5}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:12px}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}
+.progress-label span:first-child{color:var(--muted)}
+.progress-label span:last-child{font-family:'DM Mono',monospace;color:#fff}
+.progress-bar{height:3px;background:var(--subtle);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.fill-gold{background:var(--gold)}
+.fill-green{background:var(--green2)}
+.fill-blue{background:var(--blue2)}
+
+/* REFERRAL LIST */
+.ref-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border)}
+.ref-item:last-child{border-bottom:none}
+.ref-left{display:flex;align-items:center;gap:10px}
+.ref-avatar{width:30px;height:30px;border-radius:6px;background:var(--green3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--green2);font-family:'Syne',sans-serif;flex-shrink:0}
+.ref-name{font-size:13px;color:#fff;font-weight:500}
+.ref-source{font-size:10px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+.ref-date{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* ACTIVITY FEED */
+.activity-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.activity-text{font-size:12px;color:var(--text);line-height:1.5}
+.activity-time{font-size:10px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace}
+
+/* QUICK ACTIONS */
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s;text-decoration:none;display:block}
+.action-btn:hover{border-color:var(--border2);background:var(--subtle)}
+.action-label{font-size:12px;color:#fff;font-weight:500;margin-bottom:2px}
+.action-sub{font-size:10px;color:var(--muted)}
+
+.footer{border-top:1px solid var(--border);padding:20px 40px;text-align:center;font-size:10px;color:var(--muted);letter-spacing:.08em;font-family:'DM Mono',monospace;position:relative;z-index:10}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade1{animation:fadeUp .5s .05s both}
+.fade2{animation:fadeUp .5s .1s both}
+.fade3{animation:fadeUp .5s .15s both}
+.fade4{animation:fadeUp .5s .2s both}
+.fade5{animation:fadeUp .5s .25s both}
+
+@media(max-width:900px){
+  .top-stats{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .hdr,.main{padding-left:20px;padding-right:20px}
+  .greeting-name{font-size:32px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-mark">NX</div>
+    <div>
+      <div class="hdr-title">NXTGEN Consulting</div>
+      <div class="hdr-sub">Command Center</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-date" id="hdrDate"></div>
+    <div class="live-pill"><span class="live-dot"></span>Live</div>
+  </div>
+</header>
+
+<div class="main">
+  <div class="greeting fade1">
+    <div class="greeting-time" id="greetTime"></div>
+    <div class="greeting-name">Good morning, <span>Shawn.</span></div>
+    <div class="greeting-sub">Here's what's happening across your portfolio today.</div>
+  </div>
+
+  <div class="top-stats fade2">
+    <div class="stat gold">
+      <div class="stat-label">Capital Raised</div>
+      <div class="stat-value gold">$4.2M</div>
+      <div class="stat-sub">of $17.21M target</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-label">Open Referrals</div>
+      <div class="stat-value green" id="referralCount">—</div>
+      <div class="stat-sub">AF Homes for Hope</div>
+    </div>
+    <div class="stat blue">
+      <div class="stat-label">Active Companies</div>
+      <div class="stat-value blue">3</div>
+      <div class="stat-sub">Galbreath · AF Homes · VAT</div>
+    </div>
+    <div class="stat teal">
+      <div class="stat-label">Pipeline Leads</div>
+      <div class="stat-value teal">179</div>
+      <div class="stat-sub">Investor pipeline</div>
+    </div>
+  </div>
+
+  <!-- COMPANY HEALTH ROW -->
+  <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px" class="fade3">Company Health</div>
+  <div class="grid fade3">
+
+    <!-- GALBREATH -->
+    <div class="company-card galbreath">
+      <div class="co-header">
+        <div>
+          <div class="co-name">Galbreath Capital</div>
+          <div class="co-type">REG D 506(C) · REAL ESTATE</div>
+        </div>
+        <div class="co-mark galbreath">GC</div>
+      </div>
+      <div class="status-badge badge-active"><span style="width:5px;height:5px;border-radius:50%;background:var(--green2);display:inline-block"></span>Active Raise</div>
+      <div class="co-metrics">
+        <div class="co-metric">
+          <div class="co-metric-label">Closed</div>
+          <div class="co-metric-val gold">$4.2M</div>
+        </div>
+        <div class="co-metric">
+          <div class="co-metric-label">Target</div>
+          <div class="co-metric-val">$17.21M</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Raise progress</span><span>24.4%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-gold" style="width:24.4%"></div></div>
+      </div>
+      <div class="co-next">
+        <div class="co-next-label">Next milestone</div>
+        <div class="co-next-text">Projected close Mid–Late July 2026 · Steve Gordon follow-up active</div>
+      </div>
+    </div>
+
+    <!-- AF HOMES -->
+    <div class="company-card afhomes">
+      <div class="co-header">
+        <div>
+          <div class="co-name">AF Homes for Hope</div>
+          <div class="co-type">HOME HEALTHCARE · IDD · TEXAS</div>
+        </div>
+        <div class="co-mark afhomes">AF</div>
+      </div>
+      <div class="status-badge badge-building"><span style="width:5px;height:5px;border-radius:50%;background:var(--gold);display:inline-block"></span>Standing Up</div>
+      <div class="co-metrics">
+        <div class="co-metric">
+          <div class="co-metric-label">Referrals</div>
+          <div class="co-metric-val green" id="afReferrals">—</div>
+        </div>
+        <div class="co-metric">
+          <div class="co-metric-label">Residents</div>
+          <div class="co-metric-val">0</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Setup progress</span><span>40%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:40%"></div></div>
+      </div>
+      <div class="co-next">
+        <div class="co-next-label">Next milestone</div>
+        <div class="co-next-text">Furnishing complete · First resident intake pending</div>
+      </div>
+    </div>
+
+    <!-- VA TRANSPORTATION -->
+    <div class="company-card vat">
+      <div class="co-header">
+        <div>
+          <div class="co-name">V.A. Transportation</div>
+          <div class="co-type">NEMT · HOUSTON & SURROUNDING</div>
+        </div>
+        <div class="co-mark vat">VA</div>
+      </div>
+      <div class="status-badge badge-operating"><span style="width:5px;height:5px;border-radius:50%;background:var(--blue2);display:inline-block"></span>Operating</div>
+      <div class="co-metrics">
+        <div class="co-metric">
+          <div class="co-metric-label">Rides Today</div>
+          <div class="co-metric-val blue">—</div>
+        </div>
+        <div class="co-metric">
+          <div class="co-metric-label">Drivers Active</div>
+          <div class="co-metric-val">—</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Monthly capacity</span><span>—</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-blue" style="width:0%"></div></div>
+      </div>
+      <div class="co-next">
+        <div class="co-next-label">Contact</div>
+        <div class="co-next-text">281.699.2450 · Vatnemt@yahoo.com · ADA Certified · HIPAA Compliant</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW -->
+  <div class="grid-2 fade4">
+
+    <!-- REFERRAL FEED -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-left">
+          <div class="card-accent" style="background:var(--green2)"></div>
+          AF Homes — Recent Referrals
+        </div>
+        <a href="af-homes-intake.html" style="font-size:10px;color:var(--gold);text-decoration:none;letter-spacing:.08em">+ New referral</a>
+      </div>
+      <div id="referralFeed">
+        <div style="font-size:12px;color:var(--muted);text-align:center;padding:20px 0">Loading referrals...</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS + ACTIVITY -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left">
+            <div class="card-accent" style="background:var(--gold)"></div>
+            Quick Actions
+          </div>
+        </div>
+        <div class="actions-grid">
+          <a href="af-homes-intake.html" class="action-btn">
+            <div class="action-label">Log Referral</div>
+            <div class="action-sub">AF Homes intake</div>
+          </a>
+          <a href="portal.html" class="action-btn">
+            <div class="action-label">Investor Portal</div>
+            <div class="action-sub">Galbreath Capital</div>
+          </a>
+          <a href="index.html" class="action-btn">
+            <div class="action-label">Doc Generator</div>
+            <div class="action-sub">AI letters</div>
+          </a>
+          <a href="documents.html" class="action-btn">
+            <div class="action-label">Onboarding</div>
+            <div class="action-sub">New investor</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-left">
+            <div class="card-accent" style="background:var(--teal2)"></div>
+            Activity Feed
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--green2)"></div>
+          <div>
+            <div class="activity-text">AF Homes intake form deployed to GitHub Pages</div>
+            <div class="activity-time">Today · Jun 2, 2026</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--green2)"></div>
+          <div>
+            <div class="activity-text">NXTGEN_OperationsHub referral tracker built</div>
+            <div class="activity-time">Today · Jun 2, 2026</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--gold)"></div>
+          <div>
+            <div class="activity-text">Galbreath Investor Portal live · Google Sheets connected</div>
+            <div class="activity-time">Last week</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--gold)"></div>
+          <div>
+            <div class="activity-text">Steve Gordon committed $250K · Parker Henderson</div>
+            <div class="activity-time">Active</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  NXTGEN CONSULTING LLC · COMMAND CENTER · CONFIDENTIAL · INTERNAL USE ONLY
+</footer>
+
+<script>
+var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxAYbA-5_QoHK_HJ4gINI99-s0zfxQhe4gjM5Bc3c3ltRG6LAxHVl04TXT3jLCoHac8/exec';
+
+function setGreeting() {
+  var now = new Date();
+  var h = now.getHours();
+  var greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.querySelector('.greeting-name').innerHTML = greet + ', <span>Shawn.</span>';
+  document.getElementById('greetTime').textContent = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
+  document.getElementById('hdrDate').textContent = now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase();
+}
+
+function getInitials(name) {
+  if (!name || name === 'Test Patient' || name === 'New Patient') return '?';
+  return name.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+}
+
+async function loadReferrals() {
+  try {
+    var resp = await fetch(SHEET_ENDPOINT + '?action=list');
+    var data = await resp.json();
+    if (data && data.referrals && data.referrals.length > 0) {
+      var count = data.referrals.length;
+      document.getElementById('referralCount').textContent = count;
+      document.getElementById('afReferrals').textContent = count;
+      var html = data.referrals.slice(0,5).map(function(r) {
+        var initials = getInitials(r.resident_name);
+        return '<div class="ref-item">' +
+          '<div class="ref-left">' +
+            '<div class="ref-avatar">' + initials + '</div>' +
+            '<div>' +
+              '<div class="ref-name">' + (r.resident_name || 'Unknown') + '</div>' +
+              '<div class="ref-source">' + (r.referred_by || '—') + ' · ' + (r.status || 'New Referral') + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="ref-date">' + (r.date_received || '—') + '</div>' +
+        '</div>';
+      }).join('');
+      document.getElementById('referralFeed').innerHTML = html;
+    } else {
+      document.getElementById('referralCount').textContent = '0';
+      document.getElementById('afReferrals').textContent = '0';
+      document.getElementById('referralFeed').innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:20px 0">No referrals yet · <a href="af-homes-intake.html" style="color:var(--gold)">Log the first one</a></div>';
+    }
+  } catch(e) {
+    document.getElementById('referralCount').textContent = '—';
+    document.getElementById('referralFeed').innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:20px 0">Connect to NXTGEN sheet to load referrals</div>';
+  }
+}
+
+setGreeting();
+loadReferrals();
+</script>
+</body>
+</html>
