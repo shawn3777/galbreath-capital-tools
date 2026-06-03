@@ -529,15 +529,41 @@ async function submitBooking() {
   btn.disabled = true;
   btn.textContent = 'Submitting...';
 
-  // For now log to console and show success — 
-  // wire to Google Sheet endpoint in next session
-  setTimeout(function() {
-    showFormResult('success', 
-      '✓ Request received. Michael Johnson will contact you within 2 hours at ' + phone + '.<br>' +
-      'For immediate assistance call <strong>281.699.2450</strong>.'
-    );
-    btn.textContent = '✓ Request Submitted';
-  }, 1200);
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxAYbA-5_QoHK_HJ4gINI99-s0zfxQhe4gjM5Bc3c3ltRG6LAxHVl04TXT3jLCoHac8/exec';
+
+  var params = new URLSearchParams({
+    action: 'inquiry',
+    name: name,
+    phone: phone,
+    email: document.getElementById('f_email').value,
+    request_type: document.getElementById('f_type').value,
+    organization: document.getElementById('f_org').value,
+    preferred_date: document.getElementById('f_date').value,
+    pickup: document.getElementById('f_pickup').value,
+    destination: document.getElementById('f_dest').value,
+    wheelchair: document.getElementById('f_wheelchair').value,
+    passengers: document.getElementById('f_passengers').value,
+    notes: document.getElementById('f_notes').value
+  });
+
+  try {
+    var resp = await fetch(ENDPOINT + '?' + params.toString());
+    var data = await resp.json();
+    if (data.success) {
+      showFormResult('success',
+        '✓ Request received — ' + data.inquiry_id + '<br>' +
+        'Michael Johnson will contact you within 2 hours at ' + phone + '.<br>' +
+        'For immediate assistance call <strong>281.699.2450</strong>.'
+      );
+      btn.textContent = '✓ Request Submitted';
+    } else {
+      throw new Error(data.error || 'Unknown error');
+    }
+  } catch(e) {
+    showFormResult('error', 'Error submitting request. Please call 281.699.2450 directly.');
+    btn.disabled = false;
+    btn.textContent = 'Submit Request →';
+  }
 }
 
 function showFormResult(type, msg) {
